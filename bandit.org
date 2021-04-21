@@ -1,0 +1,211 @@
+#+TITLE: Test
+#+PROPERTY: header-args :tangle ape.py
+
+* Setup
+
+#+begin_src python :tangle ape.py
+import paramiko
+import json
+import sys
+
+host = "bandit.labs.overthewire.org"
+ssh_port = 2220
+credentials = {"bandit0": "bandit0"}
+
+print("Initializing ssh client")
+ssh = paramiko.SSHClient()
+ssh.load_system_host_keys()
+
+def connect(username:str):
+    global ssh
+    ssh.connect(host,ssh_port,username=username,password=credentials[username])
+
+def save():
+    global credentials
+    with open('bandit.progress','w') as f:
+        json.dump(credentials, f)
+
+def load():
+    global credentials
+    with open('bandit.progress','r') as f:
+        credentials = json.load(f)
+
+#+end_src
+
+* Bandit0 => Bandit1
+#+begin_src python :tangle ape.py
+def bandit0():
+    global credentials
+    print("Pwning bandit0")
+    connect('bandit0')
+    _, out, _ = ssh.exec_command('cat readme')
+
+    credentials["bandit1"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit1 => Bandit2
+#+begin_src python :tangle ape.py
+def bandit1():
+    global credentials
+    print("Pwning bandit1")
+    connect('bandit1')
+    _, out, _ = ssh.exec_command('cat ./-')
+    credentials["bandit2"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit2 => Bandit3
+#+begin_src python :tangle ape.py
+def bandit2():
+    global credentials
+    print("Pwning bandit2")
+    connect('bandit2')
+    _, out, _ = ssh.exec_command('cat "spaces in this filename"')
+    credentials["bandit3"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit3 => Bandit4
+#+begin_src python :tangle ape.py
+def bandit3():
+    global credentials
+    print("Pwning bandit3")
+    connect('bandit3')
+    _, out, _ = ssh.exec_command('cat ./inhere/.hidden')
+    credentials["bandit4"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit4 => Bandit5
+#+begin_src python :tangle ape.py
+def bandit4():
+    global credentials
+    print("Pwning bandit4")
+    connect('bandit4')
+
+    # Find only human readable file in the 'inhere' directory
+    _, out, _ = ssh.exec_command('file ./inhere/*')
+    file = [f for f in out.read().decode().split('\n') if 'ASCII' in f][0].split(":")[0]
+
+    _, out, _ = ssh.exec_command(F'cat {file}')
+    credentials["bandit5"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit5 => Bandit6
+#+begin_src python :tangle ape.py
+def bandit5():
+    global credentials
+    print("Pwning bandit5")
+    connect('bandit5')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command(r'find ./inhere/ -size 1033c \! -executable -exec cat {} \;')
+
+    credentials["bandit6"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit6 => Bandit7
+#+begin_src python :tangle ape.py
+def bandit6():
+    global credentials
+    print("Pwning bandit6")
+    connect('bandit6')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command(r'find / -user bandit7 -group bandit6 -size 33c -exec cat {} \;')
+
+    credentials["bandit7"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit7 => Bandit8
+#+begin_src python :tangle ape.py
+def bandit7():
+    global credentials
+    print("Pwning bandit7")
+    connect('bandit7')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command(r'grep millionth data.txt | xargs | cut -d " " -f2')
+
+    credentials["bandit8"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit8 => Bandit9
+#+begin_src python :tangle ape.py
+def bandit8():
+    global credentials
+    print("Pwning bandit8")
+    connect('bandit8')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command('sort data.txt | uniq -u')
+
+    credentials["bandit9"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit9 => Bandit10
+#+begin_src python :tangle ape.py
+def bandit9():
+    global credentials
+    print("Pwning bandit9")
+    connect('bandit9')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command(r'strings data.txt | grep -oE "= \w*" | tail -n 1 | cut -d " " -f2')
+
+    credentials["bandit10"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit10 => Bandit11
+#+begin_src python :tangle ape.py
+def bandit10():
+    global credentials
+    print("Pwning bandit10")
+    connect('bandit10')
+
+    # Find the file with the specified properties and read it
+    _, out, _ = ssh.exec_command('cat data.txt | base64 -d | cut -d " " -f4')
+
+    credentials["bandit11"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit11 => Bandit12
+#+begin_src python :tangle ape.py
+def bandit11():
+    global credentials
+    print("Pwning bandit11")
+    connect('bandit11')
+
+    # Find the file with the specified properties and read it
+    _, out, err = ssh.exec_command('cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m" | cut -d " " -f4')
+
+    credentials["bandit12"] = out.read().decode().strip()
+    save()
+#+end_src
+
+
+* Main
+#+begin_src python :tangle ape.py
+def main():
+    index = 0
+    if '-u' in sys.argv:
+        index = int(sys.argv[sys.argv.index('-u') + 1].replace("bandit", ""))
+        load()
+
+    for i in range(index, 35):
+        try:
+            eval(F"bandit{i}()")
+        except NameError:
+            print(F"User bandit{i} has not been pwned yet.")
+            break
+
+    print(credentials)
+#+end_src
