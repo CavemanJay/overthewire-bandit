@@ -1,6 +1,24 @@
-#+TITLE: Test
-#+PROPERTY: header-args :tangle ape.py
+#+TITLE: OverTheWire Bandit
 
+* Table of Contents :toc:
+- [[#about][About]]
+- [[#setup][Setup]]
+- [[#bandit0--bandit1][Bandit0 => Bandit1]]
+- [[#bandit1--bandit2][Bandit1 => Bandit2]]
+- [[#bandit2--bandit3][Bandit2 => Bandit3]]
+- [[#bandit3--bandit4][Bandit3 => Bandit4]]
+- [[#bandit4--bandit5][Bandit4 => Bandit5]]
+- [[#bandit5--bandit6][Bandit5 => Bandit6]]
+- [[#bandit6--bandit7][Bandit6 => Bandit7]]
+- [[#bandit7--bandit8][Bandit7 => Bandit8]]
+- [[#bandit8--bandit9][Bandit8 => Bandit9]]
+- [[#bandit9--bandit10][Bandit9 => Bandit10]]
+- [[#bandit10--bandit11][Bandit10 => Bandit11]]
+- [[#bandit11--bandit12][Bandit11 => Bandit12]]
+- [[#main][Main]]
+
+* About
+This script contains my efforts to script the solutions to the bandit challenges on [[https://overthewire.org][OverTheWire]]. This makes heavy use of the paramiko module to run ssh commands
 * Setup
 
 #+begin_src python :tangle ape.py
