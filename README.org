@@ -18,6 +18,9 @@
 - [[#bandit12--bandit13][Bandit12 => Bandit13]]
 - [[#bandit13--bandit14][Bandit13 => Bandit14]]
 - [[#bandit14--bandit15][Bandit14 => Bandit15]]
+- [[#bandit15--bandit16][Bandit15 => Bandit16]]
+- [[#bandit16--bandit17][Bandit16 => Bandit17]]
+- [[#bandit17--bandit18][Bandit17 => Bandit18]]
 - [[#main][Main]]
 
 * About
@@ -33,6 +36,7 @@ import shutil
 import gzip
 import subprocess
 import utils
+import re
 
 host = "bandit.labs.overthewire.org"
 ssh_port = 2220
@@ -301,7 +305,8 @@ def bandit14():
     print("Pwning bandit14")
     connect('bandit14')
 
-    _, out, _ = ssh.exec_command('cat /etc/bandit_pass/bandit14')
+    bandit14_pass_file = '/etc/bandit_pass/bandit14'
+    _, out, _ = ssh.exec_command('cat ' + bandit14_pass_file)
 
     bandit14_creds = credentials['bandit14']
 
@@ -311,9 +316,89 @@ def bandit14():
     else:
         bandit14_creds[1] = passwd
 
+    _, out, _ = ssh.exec_command(F'nc localhost 30000 < {bandit14_pass_file} | xargs | cut -d " " -f2')
+
+    credentials['bandit15'] = out.read().decode().strip()
+
     save()
 #+end_src
 
+* Bandit15 => Bandit16
+#+begin_src python :tangle ape.py
+def bandit15():
+    print("Pwning bandit15")
+    connect('bandit15')
+
+    stdin, out, err = ssh.exec_command('ncat -v --ssl localhost 30001')
+
+    print(err.readline())
+    print(err.readline())
+    print(err.readline())
+    print(err.readline())
+    print(err.readline())
+    print(err.readline())
+
+    stdin.write(F"{credentials['bandit15']}\n")
+    out.readline()
+    passwd = out.readline().strip()
+
+    credentials['bandit16'] = passwd
+
+    save()
+
+#+end_src
+
+* Bandit16 => Bandit17
+#+begin_src python :tangle ape.py
+def bandit16():
+    print("Pwning bandit16")
+    connect('bandit16')
+
+    _, out, _ = ssh.exec_command('nmap -p 31000-32000 localhost')
+
+    nmap_scan = out.read().decode()
+    ports = re.findall(r'^[0-9]{5}', nmap_scan, re.MULTILINE)
+
+    for port in ports:
+        _, out, _ = ssh.exec_command(F'cat /etc/bandit_pass/bandit16 | openssl s_client -connect localhost:{port} -quiet 2>/dev/null')
+        response_header = out.readline()
+        if "Correct" in response_header:
+            rsa_key = out.read().decode()
+            break
+
+    try:
+        os.mkdir('working/bandit16')
+    except:
+        pass
+
+    file_path = 'working/bandit16/bandit17_id_rsa'
+    with open(file_path, 'w') as f:
+        f.write(rsa_key)
+
+    credentials['bandit17'] = [os.getcwd() + "/" + file_path]
+    save()
+#+end_src
+
+* Bandit17 => Bandit18
+#+begin_src python :tangle ape.py
+def bandit17():
+    print("Pwning bandit17")
+    connect('bandit17')
+
+    _, out, _ = ssh.exec_command('cat /etc/bandit_pass/bandit17')
+
+    creds = credentials['bandit17']
+    if len(creds) == 1:
+        creds.append(out.readline())
+    else:
+        creds[1] = out.readline()
+
+    #credentials['bandit18'] = [os.getcwd() + "/" + file_path]
+    save()
+
+load()
+bandit17()
+#+end_src
 
 * Main
 #+begin_src python :tangle ape.py
