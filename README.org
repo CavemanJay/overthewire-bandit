@@ -15,6 +15,9 @@
 - [[#bandit9--bandit10][Bandit9 => Bandit10]]
 - [[#bandit10--bandit11][Bandit10 => Bandit11]]
 - [[#bandit11--bandit12][Bandit11 => Bandit12]]
+- [[#bandit12--bandit13][Bandit12 => Bandit13]]
+- [[#bandit13--bandit14][Bandit13 => Bandit14]]
+- [[#bandit14--bandit15][Bandit14 => Bandit15]]
 - [[#main][Main]]
 
 * About
@@ -25,18 +28,35 @@ This script contains my efforts to script the solutions to the bandit challenges
 import paramiko
 import json
 import sys
+import os
+import shutil
+import gzip
+import subprocess
+import utils
 
 host = "bandit.labs.overthewire.org"
 ssh_port = 2220
 credentials = {"bandit0": "bandit0"}
 
+try:
+    os.mkdir('working')
+except:
+    pass
+
 print("Initializing ssh client")
 ssh = paramiko.SSHClient()
 ssh.load_system_host_keys()
 
-def connect(username:str):
-    global ssh
-    ssh.connect(host,ssh_port,username=username,password=credentials[username])
+def connect(username: str):
+    creds = credentials[username]
+    if isinstance(creds, str):
+        ssh.connect(host, ssh_port, username=username, password=creds)
+    else:
+        if os.path.exists(creds[0]):
+            ssh.connect(host, ssh_port, username=username, key_filename = creds[0])
+        else:
+            ssh.connect(host, ssh_port, username=username, password=creds[1])
+
 
 def save():
     global credentials
@@ -206,6 +226,91 @@ def bandit11():
     _, out, err = ssh.exec_command('cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m" | cut -d " " -f4')
 
     credentials["bandit12"] = out.read().decode().strip()
+    save()
+#+end_src
+
+* Bandit12 => Bandit13
+#+begin_src python :tangle ape.py
+def bandit12():
+    global credentials
+    print("Pwning bandit12")
+    connect('bandit12')
+
+    root = os.getcwd()
+    cwd = 'working/bandit12'
+    try:
+        shutil.rmtree(cwd)
+    except:
+        pass
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    sftp = ssh.open_sftp()
+    sftp.get('./data.txt', './data.txt')
+    sftp.close()
+
+    os.popen('cat data.txt | xxd -r > data2.gz').read()
+    utils.gzip_decompress('data2.gz', 'data3.bz2')
+    utils.bzip2_decompress('data3.bz2', 'data4.gz')
+    utils.gzip_decompress('data4.gz', 'data5.tar')
+    utils.tar_decompress('data5.tar', 'data6')
+    utils.tar_decompress('data6/data5.bin', 'data7')
+    utils.bzip2_decompress('data7/data6.bin', 'data8.tar')
+    utils.tar_decompress('data8.tar', 'data9')
+    utils.gzip_decompress('data9/data8.bin', 'data10')
+
+    with open('data10', 'r') as f:
+        credentials["bandit13"] = f.read().split(' ')[-1].strip()
+
+    os.chdir(root)
+    save()
+#+end_src
+
+* Bandit13 => Bandit14
+#+begin_src python :tangle ape.py
+def bandit13():
+    global credentials
+    print("Pwning bandit13")
+    connect('bandit13')
+
+    root = os.getcwd()
+    cwd = 'working/bandit13'
+    try:
+        shutil.rmtree(cwd)
+    except:
+        pass
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    sftp = ssh.open_sftp()
+    sftp.get('./sshkey.private', './bandit14_id_rsa')
+    sftp.close()
+
+    credentials["bandit14"] = [os.getcwd() + '/bandit14_id_rsa']
+
+    os.chdir(root)
+    save()
+#+end_src
+
+* Bandit14 => Bandit15
+#+begin_src python :tangle ape.py
+def bandit14():
+    global credentials
+    print("Pwning bandit14")
+    connect('bandit14')
+
+    _, out, _ = ssh.exec_command('cat /etc/bandit_pass/bandit14')
+
+    bandit14_creds = credentials['bandit14']
+
+    passwd = out.read().decode().strip()
+    if (len(bandit14_creds) == 1):
+        bandit14_creds.append(passwd)
+    else:
+        bandit14_creds[1] = passwd
+
     save()
 #+end_src
 
