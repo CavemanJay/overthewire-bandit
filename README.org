@@ -270,7 +270,7 @@ credentials['bandit12']
 : '5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu'
 
 * Bandit12 => Bandit13
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results value pp
 def bandit12():
     print("Pwning bandit12")
     connect('bandit12')
@@ -304,10 +304,16 @@ def bandit12():
 
     os.chdir(root)
     save()
+
+bandit12()
+credentials['bandit13']
 #+end_src
 
+#+RESULTS:
+: '8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL'
+
 * Bandit13 => Bandit14
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results value pp
 def bandit13():
     print("Pwning bandit13")
     connect('bandit13')
@@ -330,10 +336,12 @@ def bandit13():
 
     os.chdir(root)
     save()
+
+bandit13()
 #+end_src
 
 * Bandit14 => Bandit15
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results value pp
 def bandit14():
     print("Pwning bandit14")
     connect('bandit14')
@@ -354,10 +362,17 @@ def bandit14():
     credentials['bandit15'] = out.read().decode().strip()
 
     save()
+
+bandit14()
+{'bandit14': credentials['bandit14'][1], 'bandit15': credentials['bandit15']}
 #+end_src
 
+#+RESULTS:
+: {'bandit14': '4wcYUJFw0k0XLShlDzztnTBHiqxU3b3e',
+:  'bandit15': 'BfMYroe26WYalil77FoDi9qh59eK5xNr'}
+
 * Bandit15 => Bandit16
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results value pp
 def bandit15():
     print("Pwning bandit15")
     connect('bandit15')
@@ -379,10 +394,15 @@ def bandit15():
 
     save()
 
+bandit15()
+credentials['bandit16']
 #+end_src
 
+#+RESULTS:
+: 'cluFn7wTiGryunymYOu4RcffSxQluehd'
+
 * Bandit16 => Bandit17
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results silent
 def bandit16():
     print("Pwning bandit16")
     connect('bandit16')
@@ -410,20 +430,23 @@ def bandit16():
 
     credentials['bandit17'] = [os.getcwd() + "/" + file_path]
     save()
+
+bandit16()
 #+end_src
 
 * Bandit17 => Bandit18
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results value pp
 def bandit17():
     print("Pwning bandit17")
     connect('bandit17')
 
     _, out, _ = ssh.exec_command('cat /etc/bandit_pass/bandit17')
     creds = credentials['bandit17']
+    passwd = out.readline().strip()
     if len(creds) == 1:
-        creds.append(out.readline())
+        creds.append(passwd)
     else:
-        creds[1] = out.readline()
+        creds[1] = passwd
 
     _, out, _ = ssh.exec_command('diff passwords.new passwords.old')
     passwd = re.findall(r'< .*$', out.read().decode(), re.MULTILINE)[0][2:]
@@ -431,7 +454,14 @@ def bandit17():
     credentials['bandit18'] = passwd
 
     save()
+
+bandit17()
+{'bandit17': credentials['bandit17'][1], 'bandit18': credentials['bandit18']}
 #+end_src
+
+#+RESULTS:
+: {'bandit17': 'xLYVMN9WE5zQ5vHacb0sZEVqbrp7nBTn',
+:  'bandit18': 'kfBf3eYk5BPBRzwjqutbbfE887SVc5Yd'}
 
 * Bandit18 => Bandit19
 
@@ -597,13 +627,11 @@ do
 done
 #+end_example
 
-Now we need to create our own script to be executed by the cronjob
-#+begin_src shell
-echo hi
+Now we need to create our own script to be executed by the cronjob. We'll just use a simple script to read the password file and put it in a temp file
+#+begin_src shell :exports code
+cat /etc/bandit_pass/bandit24 > /tmp/jay
+chmod +r /tmp/jay
 #+end_src
-
-#+RESULTS:
-: hi
 
 #+begin_src python :tangle ape.py
 def bandit22():
