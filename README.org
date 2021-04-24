@@ -617,17 +617,14 @@ out.read().decode()
 #+begin_src python :session :exports both
 connect('bandit22')
 _, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit23.sh')
-out.read().decode()
+"".join([x for x in out.readlines() if x.strip() != ""])
 #+end_src
 
 #+RESULTS:
 : #!/bin/bash
-:
 : myname=$(whoami)
 : mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
-:
 : echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
-:
 : cat /etc/bandit_pass/$myname > /tmp/$mytarget
 
 Running this bash script with the =myname= variable set to bandit23, we see that the output of the password file is being written to another temp file like the previous challenge.
