@@ -817,3 +817,113 @@ credentials['bandit27']
 
 #+RESULTS:
 : 3ba3118a22e93127a4ed485be72ef5ea
+
+* Bandit27 => Bandit28
+#+begin_src python :tangle ape.py :session :results silent
+def bandit27(view_output=False):
+    print("Pwning bandit27")
+    connect('bandit27')
+
+    path = make_work_dir()
+
+    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
+    channel = ssh.get_transport().open_session()
+    channel.get_pty()
+    channel.invoke_shell()
+    time.sleep(1)
+
+    clone_command = 'git clone ssh://bandit27-git@localhost/home/bandit27-git/repo'
+    channel.send(F'cd {path} && {clone_command} \n')
+    max_bytes = 3072
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    channel.send('yes\n')
+    time.sleep(1)
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    channel.send(credentials['bandit27'] + '\n')
+    time.sleep(1)
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    _, out, _ = ssh.exec_command(F'cat {path + "/repo/README"} | cut -d " " -f8')
+    passwd = out.readline().strip()
+    credentials['bandit28'] = passwd
+
+    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
+    save()
+#+end_src
+
+#+begin_src python :session :exports none
+bandit27()
+credentials['bandit28']
+#+end_src
+
+#+RESULTS:
+: 0ef186ac70e04ea33b4c1853d2526fa2
+
+* Bandit28 => Bandit29
+#+begin_src python :tangle ape.py :session :results silent
+def bandit28(view_output=False):
+    print("Pwning bandit28")
+    connect('bandit28')
+
+    path = make_work_dir()
+
+    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
+    channel = ssh.get_transport().open_session()
+    channel.get_pty()
+    channel.invoke_shell()
+    time.sleep(1)
+
+    clone_command = 'git clone ssh://bandit28-git@localhost/home/bandit28-git/repo'
+    channel.send(F'cd {path} && {clone_command} \n')
+    max_bytes = 3072
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    channel.send('yes\n')
+    time.sleep(1)
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    channel.send(credentials['bandit28'] + '\n')
+    time.sleep(1)
+    while channel.recv_ready():
+        time.sleep(1)
+        output = channel.recv(max_bytes).decode()
+        if view_output:
+            print(output)
+
+    command = F'cd {path + "/repo"} && git log | grep -E \'^commit\' | cut -d " " -f2 | while read line; do git show $line; done | grep -E \'\\+- password: [^x<]\' | cut -d " " -f3'
+    _, out, _ = ssh.exec_command(command)
+    passwd = out.readline().strip()
+    credentials['bandit29'] = passwd
+    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
+    save()
+#+end_src
+
+#+begin_src python :session :exports none
+bandit28()
+credentials['bandit29']
+#+end_src
+
+#+RESULTS:
+: bbc96594b4e001778eee9975372716b2
