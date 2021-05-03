@@ -950,3 +950,39 @@ credentials['bandit31']
 
 #+RESULTS:
 : 47e603bb428404d265f59c42920d81e5
+
+* Bandit31 => Bandit32
+
+#+begin_src python :tangle ape.py :session :results silent
+def bandit31():
+    print("Pwning bandit31")
+    path = clone_repo('bandit31')
+    repo = pygit2.Repository(path)
+
+    with open(path + "/key.txt", 'w') as f:
+        f.write("May I come in?")
+
+    try:
+        os.unlink(path + "/.gitignore")
+    except:
+        pass
+
+    index = repo.index
+    index.add("key.txt")
+    index.write()
+
+    out = os.popen(
+        F"cd {path} && sshpass -p '{credentials['bandit31']}' git push origin master 2>&1").read()
+
+    passwd = re.findall(r'password.*\nremote: (\w+)', out, re.MULTILINE)[0]
+    credentials['bandit32'] = passwd
+    save()
+#+end_src
+
+#+begin_src python :session :exports none
+bandit31()
+credentials['bandit32']
+#+end_src
+
+#+RESULTS:
+: 56a9bf19c63d650ce78e6ec0354ee45e
