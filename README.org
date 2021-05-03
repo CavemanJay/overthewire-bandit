@@ -20,18 +20,19 @@ import re
 import base64
 import time
 import itertools
+import pygit2
 
 host = "bandit.labs.overthewire.org"
 ssh_port = 2220
 credentials = {"bandit0": "bandit0"}
 
 def save():
-    with open('bandit.progress','w') as f:
+    with open('bandit.progress', 'w') as f:
         json.dump(credentials, f)
 
 def load():
     global credentials
-    with open('bandit.progress','r') as f:
+    with open('bandit.progress', 'r') as f:
         credentials = json.load(f)
 
 try:
@@ -62,6 +63,18 @@ def make_work_dir():
     path = '/tmp/jaydlc'
     ssh.exec_command(F'mkdir {path} && chmod 777 {path}')
     return path
+
+def clone_repo(username: str):
+    url = F"ssh://{username}-git@{host}:{ssh_port}/home/{username}-git/repo"
+    creds = pygit2.UserPass(F"{username}-git", credentials[username])
+    callbacks = pygit2.RemoteCallbacks(credentials=creds)
+    clone_path = F"./working/{username}/repo"
+    try:
+        pygit2.clone_repository(url, clone_path, callbacks=callbacks)
+    except ValueError as e:
+        if not "exists" in e.args[0]:
+            raise
+    return clone_path
 #+end_src
 
 * Bandit0 => Bandit1
@@ -685,6 +698,7 @@ do
         rm -f ./$i
     fi
 done
+
 #+end_example
 
 This script executes all script files in \/var/spool/bandit24/
@@ -822,46 +836,14 @@ credentials['bandit27']
 #+begin_src python :tangle ape.py :session :results silent
 def bandit27(view_output=False):
     print("Pwning bandit27")
-    connect('bandit27')
+    path = clone_repo('bandit27')
+    repo = pygit2.Repository(path)
 
-    path = make_work_dir()
+    with open(F'{path}/README') as f:
+        contents = f.read().strip()
 
-    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
-    channel = ssh.get_transport().open_session()
-    channel.get_pty()
-    channel.invoke_shell()
-    time.sleep(1)
-
-    clone_command = 'git clone ssh://bandit27-git@localhost/home/bandit27-git/repo'
-    channel.send(F'cd {path} && {clone_command} \n')
-    max_bytes = 3072
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    channel.send('yes\n')
-    time.sleep(1)
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    channel.send(credentials['bandit27'] + '\n')
-    time.sleep(1)
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    _, out, _ = ssh.exec_command(F'cat {path + "/repo/README"} | cut -d " " -f8')
-    passwd = out.readline().strip()
+    passwd = contents.split(':')[1].strip()
     credentials['bandit28'] = passwd
-
-    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
     save()
 #+end_src
 
@@ -874,49 +856,29 @@ credentials['bandit28']
 : 0ef186ac70e04ea33b4c1853d2526fa2
 
 * Bandit28 => Bandit29
+
+The password was originally kept in one of the files.
+If we look at the diffs between commits we are able to find the password.
+
+From the command line:
+
+#+begin_src bash :results none :exports code
+ git log | grep -E '^commit' | cut -d " " -f2 | while read line; do git show $line; done | grep -E '\+- password: [^x<]' | cut -d " " -f3
+#+end_src
+
 #+begin_src python :tangle ape.py :session :results silent
-def bandit28(view_output=False):
+def bandit28():
     print("Pwning bandit28")
-    connect('bandit28')
+    path = clone_repo('bandit28')
+    repo = pygit2.Repository(path)
 
-    path = make_work_dir()
+    for commit in repo.walk(repo.head.target):
+        diff = repo.diff(commit.parents[0], commit).patch
+        break
 
-    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
-    channel = ssh.get_transport().open_session()
-    channel.get_pty()
-    channel.invoke_shell()
-    time.sleep(1)
-
-    clone_command = 'git clone ssh://bandit28-git@localhost/home/bandit28-git/repo'
-    channel.send(F'cd {path} && {clone_command} \n')
-    max_bytes = 3072
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    channel.send('yes\n')
-    time.sleep(1)
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    channel.send(credentials['bandit28'] + '\n')
-    time.sleep(1)
-    while channel.recv_ready():
-        time.sleep(1)
-        output = channel.recv(max_bytes).decode()
-        if view_output:
-            print(output)
-
-    command = F'cd {path + "/repo"} && git log | grep -E \'^commit\' | cut -d " " -f2 | while read line; do git show $line; done | grep -E \'\\+- password: [^x<]\' | cut -d " " -f3'
-    _, out, _ = ssh.exec_command(command)
-    passwd = out.readline().strip()
+    matches = re.findall(r'password: (.*)', diff, re.MULTILINE)
+    passwd = matches[0]
     credentials['bandit29'] = passwd
-    _, _, _ = ssh.exec_command(F'rm -rf {path + "/repo"}')
     save()
 #+end_src
 
@@ -927,3 +889,59 @@ credentials['bandit29']
 
 #+RESULTS:
 : bbc96594b4e001778eee9975372716b2
+
+
+* Bandit29 => Bandit30
+
+The password is found in the =dev= branch of the repository. You can find what branches are on the remote by running the command =git branch -r=.
+
+#+begin_src python :tangle ape.py :session :results silent
+def bandit29():
+    print("Pwning bandit29")
+    path = clone_repo('bandit29')
+    repo = pygit2.Repository(path)
+    branches = [b.decode() for b in repo.raw_listall_branches(pygit2.GIT_BRANCH_ALL)]
+    #x=repo.lookup_branch('origin/dev', pygit2.GIT_BRANCH_REMOTE)
+    repo.checkout('refs/remotes/origin/dev')
+
+    with open(F'{path}/README.md') as f:
+        contents = f.readlines()[-2]
+
+    passwd = contents.split(' ')[2].strip()
+    credentials['bandit30'] = passwd
+    save()
+#+end_src
+
+#+begin_src python :session :exports none
+bandit29()
+credentials['bandit30']
+#+end_src
+
+#+RESULTS:
+: 5b90576bedb2cc04c86a9e924ce42faf
+
+* Bandit30 => Bandit31
+
+For this repository we have to read the =secret= tag. From the cli: =git show secret=.
+
+#+begin_src python :tangle ape.py :session :results silent
+def bandit30():
+    print("Pwning bandit30")
+    path = clone_repo('bandit30')
+    repo = pygit2.Repository(path)
+
+    tag_name = 'secret'
+    obj = repo.revparse_single(tag_name)
+
+    passwd = obj.data.decode().strip()
+    credentials['bandit31'] = passwd
+    save()
+#+end_src
+
+#+begin_src python :session :exports none
+bandit30()
+credentials['bandit31']
+#+end_src
+
+#+RESULTS:
+: 47e603bb428404d265f59c42920d81e5
