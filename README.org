@@ -6,21 +6,26 @@
 
 * About
 This script contains my efforts to script the solutions to the bandit challenges on [[https://overthewire.org][OverTheWire]]. This makes heavy use of the paramiko module to run ssh commands
+
+** Requirements:
+- sshpass
+- pygit2
+- paramiko
 * Setup
 #+begin_src python :tangle ape.py :session :results silent
-import paramiko
-import json
-import sys
-import os
-import shutil
-import gzip
-import subprocess
-import utils
-import re
 import base64
-import time
+import gzip
 import itertools
+import json
+import os
+import paramiko
 import pygit2
+import re
+import shutil
+import subprocess
+import sys
+import time
+import utils
 
 host = "bandit.labs.overthewire.org"
 ssh_port = 2220
