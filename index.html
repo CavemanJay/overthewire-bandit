@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-05-03 Mon 17:14 -->
+<!-- 2021-05-03 Mon 18:40 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OverTheWire Bandit</title>
@@ -229,68 +229,84 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org3c7ea83">About</a></li>
-<li><a href="#org8a25d28">Setup</a></li>
-<li><a href="#org5fad004">Bandit0 =&gt; Bandit1</a></li>
-<li><a href="#org56a79e9">Bandit1 =&gt; Bandit2</a></li>
-<li><a href="#org5cd7da6">Bandit2 =&gt; Bandit3</a></li>
-<li><a href="#orge2611d4">Bandit3 =&gt; Bandit4</a></li>
-<li><a href="#org5fa5c13">Bandit4 =&gt; Bandit5</a></li>
-<li><a href="#org1512821">Bandit5 =&gt; Bandit6</a></li>
-<li><a href="#org8340ac4">Bandit6 =&gt; Bandit7</a></li>
-<li><a href="#org4b202d4">Bandit7 =&gt; Bandit8</a></li>
-<li><a href="#org7a66da5">Bandit8 =&gt; Bandit9</a></li>
-<li><a href="#org33558d6">Bandit9 =&gt; Bandit10</a></li>
-<li><a href="#orgf216fff">Bandit10 =&gt; Bandit11</a></li>
-<li><a href="#org8b1d944">Bandit11 =&gt; Bandit12</a></li>
-<li><a href="#org555fc8b">Bandit12 =&gt; Bandit13</a></li>
-<li><a href="#orgcc6a8bd">Bandit13 =&gt; Bandit14</a></li>
-<li><a href="#org134e785">Bandit14 =&gt; Bandit15</a></li>
-<li><a href="#orgde8ddd2">Bandit15 =&gt; Bandit16</a></li>
-<li><a href="#org95631d8">Bandit16 =&gt; Bandit17</a></li>
-<li><a href="#orgf0930bf">Bandit17 =&gt; Bandit18</a></li>
-<li><a href="#orgf29ff98">Bandit18 =&gt; Bandit19</a></li>
-<li><a href="#org72be337">Bandit19 =&gt; Bandit20</a></li>
-<li><a href="#orgf816e68">Bandit20 =&gt; Bandit21</a></li>
-<li><a href="#org5c60735">Bandit21 =&gt; Bandit22</a></li>
-<li><a href="#orgbce1caf">Bandit22 =&gt; Bandit23</a></li>
-<li><a href="#org3e05c9f">Bandit23 =&gt; Bandit24</a></li>
-<li><a href="#org6325a8d">Bandit24 =&gt; Bandit25</a></li>
-<li><a href="#orge36c510">Bandit25 =&gt; Bandit26</a></li>
-<li><a href="#org589ddec">Bandit26 =&gt; Bandit27</a></li>
-<li><a href="#org1822660">Bandit27 =&gt; Bandit28</a></li>
-<li><a href="#orgf82e0f9">Bandit28 =&gt; Bandit29</a></li>
-<li><a href="#orgfbae35e">Bandit29 =&gt; Bandit30</a></li>
-<li><a href="#org1907fae">Bandit30 =&gt; Bandit31</a></li>
+<li><a href="#org0a010ae">About</a>
+<ul>
+<li><a href="#org12397b7">Requirements:</a></li>
+</ul>
+</li>
+<li><a href="#orgcc949b4">Setup</a></li>
+<li><a href="#org355ad8b">Bandit0 =&gt; Bandit1</a></li>
+<li><a href="#orgd1f5b17">Bandit1 =&gt; Bandit2</a></li>
+<li><a href="#org11f6b59">Bandit2 =&gt; Bandit3</a></li>
+<li><a href="#orgcc3f747">Bandit3 =&gt; Bandit4</a></li>
+<li><a href="#org3f3dc45">Bandit4 =&gt; Bandit5</a></li>
+<li><a href="#org6ae4005">Bandit5 =&gt; Bandit6</a></li>
+<li><a href="#org8053675">Bandit6 =&gt; Bandit7</a></li>
+<li><a href="#orgce9bcc9">Bandit7 =&gt; Bandit8</a></li>
+<li><a href="#org6b7afed">Bandit8 =&gt; Bandit9</a></li>
+<li><a href="#orgbd7c599">Bandit9 =&gt; Bandit10</a></li>
+<li><a href="#org61e6c2f">Bandit10 =&gt; Bandit11</a></li>
+<li><a href="#org58ee14b">Bandit11 =&gt; Bandit12</a></li>
+<li><a href="#org3ffff22">Bandit12 =&gt; Bandit13</a></li>
+<li><a href="#org0265afe">Bandit13 =&gt; Bandit14</a></li>
+<li><a href="#org2bf2988">Bandit14 =&gt; Bandit15</a></li>
+<li><a href="#orgb0290d3">Bandit15 =&gt; Bandit16</a></li>
+<li><a href="#org378a534">Bandit16 =&gt; Bandit17</a></li>
+<li><a href="#orga5cf14f">Bandit17 =&gt; Bandit18</a></li>
+<li><a href="#orgd66ea50">Bandit18 =&gt; Bandit19</a></li>
+<li><a href="#orga7b8b6c">Bandit19 =&gt; Bandit20</a></li>
+<li><a href="#orgdbd75fc">Bandit20 =&gt; Bandit21</a></li>
+<li><a href="#org07857d2">Bandit21 =&gt; Bandit22</a></li>
+<li><a href="#org95b9a3d">Bandit22 =&gt; Bandit23</a></li>
+<li><a href="#org8a9a4e7">Bandit23 =&gt; Bandit24</a></li>
+<li><a href="#orga0c4efe">Bandit24 =&gt; Bandit25</a></li>
+<li><a href="#orgb9910fd">Bandit25 =&gt; Bandit26</a></li>
+<li><a href="#orgdb26c58">Bandit26 =&gt; Bandit27</a></li>
+<li><a href="#org398bdb5">Bandit27 =&gt; Bandit28</a></li>
+<li><a href="#org484d7a9">Bandit28 =&gt; Bandit29</a></li>
+<li><a href="#org09fa36a">Bandit29 =&gt; Bandit30</a></li>
+<li><a href="#org9d2363b">Bandit30 =&gt; Bandit31</a></li>
+<li><a href="#orgdbcaa6e">Bandit31 =&gt; Bandit32</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org3c7ea83" class="outline-2">
-<h2 id="org3c7ea83">About</h2>
-<div class="outline-text-2" id="text-org3c7ea83">
+<div id="outline-container-org0a010ae" class="outline-2">
+<h2 id="org0a010ae">About</h2>
+<div class="outline-text-2" id="text-org0a010ae">
 <p>
 This script contains my efforts to script the solutions to the bandit challenges on <a href="https://overthewire.org">OverTheWire</a>. This makes heavy use of the paramiko module to run ssh commands
 </p>
 </div>
+
+<div id="outline-container-org12397b7" class="outline-3">
+<h3 id="org12397b7">Requirements:</h3>
+<div class="outline-text-3" id="text-org12397b7">
+<ul class="org-ul">
+<li>sshpass</li>
+<li>pygit2</li>
+<li>paramiko</li>
+</ul>
 </div>
-<div id="outline-container-org8a25d28" class="outline-2">
-<h2 id="org8a25d28">Setup</h2>
-<div class="outline-text-2" id="text-org8a25d28">
+</div>
+</div>
+<div id="outline-container-orgcc949b4" class="outline-2">
+<h2 id="orgcc949b4">Setup</h2>
+<div class="outline-text-2" id="text-orgcc949b4">
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #51afef;">import</span> paramiko
-<span style="color: #51afef;">import</span> json
-<span style="color: #51afef;">import</span> sys
-<span style="color: #51afef;">import</span> os
-<span style="color: #51afef;">import</span> shutil
+<pre class="src src-python"><span style="color: #51afef;">import</span> base64
 <span style="color: #51afef;">import</span> gzip
-<span style="color: #51afef;">import</span> subprocess
-<span style="color: #51afef;">import</span> utils
-<span style="color: #51afef;">import</span> re
-<span style="color: #51afef;">import</span> base64
-<span style="color: #51afef;">import</span> time
 <span style="color: #51afef;">import</span> itertools
+<span style="color: #51afef;">import</span> json
+<span style="color: #51afef;">import</span> os
+<span style="color: #51afef;">import</span> paramiko
 <span style="color: #51afef;">import</span> pygit2
+<span style="color: #51afef;">import</span> re
+<span style="color: #51afef;">import</span> shutil
+<span style="color: #51afef;">import</span> subprocess
+<span style="color: #51afef;">import</span> sys
+<span style="color: #51afef;">import</span> time
+<span style="color: #51afef;">import</span> utils
 
 <span style="color: #dcaeea;">host</span> = <span style="color: #98be65;">"bandit.labs.overthewire.org"</span>
 <span style="color: #dcaeea;">ssh_port</span> = <span style="color: #da8548; font-weight: bold;">2220</span>
@@ -350,9 +366,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org5fad004" class="outline-2">
-<h2 id="org5fad004">Bandit0 =&gt; Bandit1</h2>
-<div class="outline-text-2" id="text-org5fad004">
+<div id="outline-container-org355ad8b" class="outline-2">
+<h2 id="org355ad8b">Bandit0 =&gt; Bandit1</h2>
+<div class="outline-text-2" id="text-org355ad8b">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit0</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit0"</span>)
@@ -365,9 +381,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org56a79e9" class="outline-2">
-<h2 id="org56a79e9">Bandit1 =&gt; Bandit2</h2>
-<div class="outline-text-2" id="text-org56a79e9">
+<div id="outline-container-orgd1f5b17" class="outline-2">
+<h2 id="orgd1f5b17">Bandit1 =&gt; Bandit2</h2>
+<div class="outline-text-2" id="text-orgd1f5b17">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit1</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit1"</span>)
@@ -380,9 +396,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org5cd7da6" class="outline-2">
-<h2 id="org5cd7da6">Bandit2 =&gt; Bandit3</h2>
-<div class="outline-text-2" id="text-org5cd7da6">
+<div id="outline-container-org11f6b59" class="outline-2">
+<h2 id="org11f6b59">Bandit2 =&gt; Bandit3</h2>
+<div class="outline-text-2" id="text-org11f6b59">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit2</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit2"</span>)
@@ -395,9 +411,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orge2611d4" class="outline-2">
-<h2 id="orge2611d4">Bandit3 =&gt; Bandit4</h2>
-<div class="outline-text-2" id="text-orge2611d4">
+<div id="outline-container-orgcc3f747" class="outline-2">
+<h2 id="orgcc3f747">Bandit3 =&gt; Bandit4</h2>
+<div class="outline-text-2" id="text-orgcc3f747">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit3</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit3"</span>)
@@ -410,9 +426,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org5fa5c13" class="outline-2">
-<h2 id="org5fa5c13">Bandit4 =&gt; Bandit5</h2>
-<div class="outline-text-2" id="text-org5fa5c13">
+<div id="outline-container-org3f3dc45" class="outline-2">
+<h2 id="org3f3dc45">Bandit4 =&gt; Bandit5</h2>
+<div class="outline-text-2" id="text-org3f3dc45">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit4</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit4"</span>)
@@ -430,9 +446,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org1512821" class="outline-2">
-<h2 id="org1512821">Bandit5 =&gt; Bandit6</h2>
-<div class="outline-text-2" id="text-org1512821">
+<div id="outline-container-org6ae4005" class="outline-2">
+<h2 id="org6ae4005">Bandit5 =&gt; Bandit6</h2>
+<div class="outline-text-2" id="text-org6ae4005">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit5</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit5"</span>)
@@ -448,9 +464,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org8340ac4" class="outline-2">
-<h2 id="org8340ac4">Bandit6 =&gt; Bandit7</h2>
-<div class="outline-text-2" id="text-org8340ac4">
+<div id="outline-container-org8053675" class="outline-2">
+<h2 id="org8053675">Bandit6 =&gt; Bandit7</h2>
+<div class="outline-text-2" id="text-org8053675">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit6</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit6"</span>)
@@ -466,9 +482,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org4b202d4" class="outline-2">
-<h2 id="org4b202d4">Bandit7 =&gt; Bandit8</h2>
-<div class="outline-text-2" id="text-org4b202d4">
+<div id="outline-container-orgce9bcc9" class="outline-2">
+<h2 id="orgce9bcc9">Bandit7 =&gt; Bandit8</h2>
+<div class="outline-text-2" id="text-orgce9bcc9">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit7</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit7"</span>)
@@ -484,9 +500,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org7a66da5" class="outline-2">
-<h2 id="org7a66da5">Bandit8 =&gt; Bandit9</h2>
-<div class="outline-text-2" id="text-org7a66da5">
+<div id="outline-container-org6b7afed" class="outline-2">
+<h2 id="org6b7afed">Bandit8 =&gt; Bandit9</h2>
+<div class="outline-text-2" id="text-org6b7afed">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit8</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit8"</span>)
@@ -502,9 +518,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org33558d6" class="outline-2">
-<h2 id="org33558d6">Bandit9 =&gt; Bandit10</h2>
-<div class="outline-text-2" id="text-org33558d6">
+<div id="outline-container-orgbd7c599" class="outline-2">
+<h2 id="orgbd7c599">Bandit9 =&gt; Bandit10</h2>
+<div class="outline-text-2" id="text-orgbd7c599">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit9</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit9"</span>)
@@ -520,9 +536,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orgf216fff" class="outline-2">
-<h2 id="orgf216fff">Bandit10 =&gt; Bandit11</h2>
-<div class="outline-text-2" id="text-orgf216fff">
+<div id="outline-container-org61e6c2f" class="outline-2">
+<h2 id="org61e6c2f">Bandit10 =&gt; Bandit11</h2>
+<div class="outline-text-2" id="text-org61e6c2f">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit10</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit10"</span>)
@@ -538,9 +554,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org8b1d944" class="outline-2">
-<h2 id="org8b1d944">Bandit11 =&gt; Bandit12</h2>
-<div class="outline-text-2" id="text-org8b1d944">
+<div id="outline-container-org58ee14b" class="outline-2">
+<h2 id="org58ee14b">Bandit11 =&gt; Bandit12</h2>
+<div class="outline-text-2" id="text-org58ee14b">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit11</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit11"</span>)
@@ -556,9 +572,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org555fc8b" class="outline-2">
-<h2 id="org555fc8b">Bandit12 =&gt; Bandit13</h2>
-<div class="outline-text-2" id="text-org555fc8b">
+<div id="outline-container-org3ffff22" class="outline-2">
+<h2 id="org3ffff22">Bandit12 =&gt; Bandit13</h2>
+<div class="outline-text-2" id="text-org3ffff22">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit12</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit12"</span>)
@@ -598,9 +614,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orgcc6a8bd" class="outline-2">
-<h2 id="orgcc6a8bd">Bandit13 =&gt; Bandit14</h2>
-<div class="outline-text-2" id="text-orgcc6a8bd">
+<div id="outline-container-org0265afe" class="outline-2">
+<h2 id="org0265afe">Bandit13 =&gt; Bandit14</h2>
+<div class="outline-text-2" id="text-org0265afe">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit13</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit13"</span>)
@@ -629,9 +645,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org134e785" class="outline-2">
-<h2 id="org134e785">Bandit14 =&gt; Bandit15</h2>
-<div class="outline-text-2" id="text-org134e785">
+<div id="outline-container-org2bf2988" class="outline-2">
+<h2 id="org2bf2988">Bandit14 =&gt; Bandit15</h2>
+<div class="outline-text-2" id="text-org2bf2988">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit14</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit14"</span>)
@@ -656,9 +672,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orgde8ddd2" class="outline-2">
-<h2 id="orgde8ddd2">Bandit15 =&gt; Bandit16</h2>
-<div class="outline-text-2" id="text-orgde8ddd2">
+<div id="outline-container-orgb0290d3" class="outline-2">
+<h2 id="orgb0290d3">Bandit15 =&gt; Bandit16</h2>
+<div class="outline-text-2" id="text-orgb0290d3">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit15</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit15"</span>)
@@ -685,9 +701,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-org95631d8" class="outline-2">
-<h2 id="org95631d8">Bandit16 =&gt; Bandit17</h2>
-<div class="outline-text-2" id="text-org95631d8">
+<div id="outline-container-org378a534" class="outline-2">
+<h2 id="org378a534">Bandit16 =&gt; Bandit17</h2>
+<div class="outline-text-2" id="text-org378a534">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit16</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit16"</span>)
@@ -721,9 +737,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orgf0930bf" class="outline-2">
-<h2 id="orgf0930bf">Bandit17 =&gt; Bandit18</h2>
-<div class="outline-text-2" id="text-orgf0930bf">
+<div id="outline-container-orga5cf14f" class="outline-2">
+<h2 id="orga5cf14f">Bandit17 =&gt; Bandit18</h2>
+<div class="outline-text-2" id="text-orga5cf14f">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit17</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit17"</span>)
@@ -747,9 +763,9 @@ ssh.load_system_host_keys()
 </div>
 </div>
 
-<div id="outline-container-orgf29ff98" class="outline-2">
-<h2 id="orgf29ff98">Bandit18 =&gt; Bandit19</h2>
-<div class="outline-text-2" id="text-orgf29ff98">
+<div id="outline-container-orgd66ea50" class="outline-2">
+<h2 id="orgd66ea50">Bandit18 =&gt; Bandit19</h2>
+<div class="outline-text-2" id="text-orgd66ea50">
 <p>
 Trying to log in with the normal <code>ssh</code> command will kick us out but with paramiko it&rsquo;s pretty simple.
 </p>
@@ -769,9 +785,9 @@ The normal way would be to use the command: <code>ssh bandit18@bandit.labs.overt
 </div>
 </div>
 
-<div id="outline-container-org72be337" class="outline-2">
-<h2 id="org72be337">Bandit19 =&gt; Bandit20</h2>
-<div class="outline-text-2" id="text-org72be337">
+<div id="outline-container-orga7b8b6c" class="outline-2">
+<h2 id="orga7b8b6c">Bandit19 =&gt; Bandit20</h2>
+<div class="outline-text-2" id="text-orga7b8b6c">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit19</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit19"</span>)
@@ -784,9 +800,9 @@ The normal way would be to use the command: <code>ssh bandit18@bandit.labs.overt
 </div>
 </div>
 
-<div id="outline-container-orgf816e68" class="outline-2">
-<h2 id="orgf816e68">Bandit20 =&gt; Bandit21</h2>
-<div class="outline-text-2" id="text-orgf816e68">
+<div id="outline-container-orgdbd75fc" class="outline-2">
+<h2 id="orgdbd75fc">Bandit20 =&gt; Bandit21</h2>
+<div class="outline-text-2" id="text-orgdbd75fc">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit20</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit20"</span>)
@@ -801,9 +817,9 @@ The normal way would be to use the command: <code>ssh bandit18@bandit.labs.overt
 </div>
 </div>
 
-<div id="outline-container-org5c60735" class="outline-2">
-<h2 id="org5c60735">Bandit21 =&gt; Bandit22</h2>
-<div class="outline-text-2" id="text-org5c60735">
+<div id="outline-container-org07857d2" class="outline-2">
+<h2 id="org07857d2">Bandit21 =&gt; Bandit22</h2>
+<div class="outline-text-2" id="text-org07857d2">
 <p>
 The cronjob script is catting the bandit22 password file into a file in the /tmp folder every minute
 </p>
@@ -849,9 +865,9 @@ All we have to do is read that file
 </div>
 </div>
 
-<div id="outline-container-orgbce1caf" class="outline-2">
-<h2 id="orgbce1caf">Bandit22 =&gt; Bandit23</h2>
-<div class="outline-text-2" id="text-orgbce1caf">
+<div id="outline-container-org95b9a3d" class="outline-2">
+<h2 id="org95b9a3d">Bandit22 =&gt; Bandit23</h2>
+<div class="outline-text-2" id="text-org95b9a3d">
 <p>
 Another cron script for us to look at and exploit
 </p>
@@ -911,9 +927,9 @@ Copying passwordfile /etc/bandit_pass/bandit23 to /tmp/8ca319486bfbbc3663ea0fbe8
 </div>
 </div>
 
-<div id="outline-container-org3e05c9f" class="outline-2">
-<h2 id="org3e05c9f">Bandit23 =&gt; Bandit24</h2>
-<div class="outline-text-2" id="text-org3e05c9f">
+<div id="outline-container-org8a9a4e7" class="outline-2">
+<h2 id="org8a9a4e7">Bandit23 =&gt; Bandit24</h2>
+<div class="outline-text-2" id="text-org8a9a4e7">
 <p>
 More cron scripts! Except now we have to write our own
 </p>
@@ -924,7 +940,7 @@ out.read().decode()
 </pre>
 </div>
 
-<pre class="example" id="orge4b10f5">
+<pre class="example" id="org0107602">
 #!/bin/bash
 
 myname=$(whoami)
@@ -984,9 +1000,9 @@ We&rsquo;ll just use a simple script to read the password file and put it in a t
 </div>
 </div>
 
-<div id="outline-container-org6325a8d" class="outline-2">
-<h2 id="org6325a8d">Bandit24 =&gt; Bandit25</h2>
-<div class="outline-text-2" id="text-org6325a8d">
+<div id="outline-container-orga0c4efe" class="outline-2">
+<h2 id="orga0c4efe">Bandit24 =&gt; Bandit25</h2>
+<div class="outline-text-2" id="text-orga0c4efe">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit24</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit24"</span>)
@@ -1031,9 +1047,9 @@ We&rsquo;ll just use a simple script to read the password file and put it in a t
 </div>
 </div>
 
-<div id="outline-container-orge36c510" class="outline-2">
-<h2 id="orge36c510">Bandit25 =&gt; Bandit26</h2>
-<div class="outline-text-2" id="text-orge36c510">
+<div id="outline-container-orgb9910fd" class="outline-2">
+<h2 id="orgb9910fd">Bandit25 =&gt; Bandit26</h2>
+<div class="outline-text-2" id="text-orgb9910fd">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit25</span>():
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit25"</span>)
@@ -1062,9 +1078,9 @@ We&rsquo;ll just use a simple script to read the password file and put it in a t
 </div>
 </div>
 
-<div id="outline-container-org589ddec" class="outline-2">
-<h2 id="org589ddec">Bandit26 =&gt; Bandit27</h2>
-<div class="outline-text-2" id="text-org589ddec">
+<div id="outline-container-orgdb26c58" class="outline-2">
+<h2 id="orgdb26c58">Bandit26 =&gt; Bandit27</h2>
+<div class="outline-text-2" id="text-orgdb26c58">
 <p>
 Unfortunately, after getting the ssh key for bandit26, I have not figured out a way to automate the pwning of 27 due to bandit26&rsquo;s login shell being <code>more</code>.
 The manual way to do it is to make your terminal really small so that <code>more</code> enters command mode.
@@ -1073,9 +1089,9 @@ After the bash shell has spawned, enter the command <code>./bandit27-do cat /etc
 </p>
 </div>
 </div>
-<div id="outline-container-org1822660" class="outline-2">
-<h2 id="org1822660">Bandit27 =&gt; Bandit28</h2>
-<div class="outline-text-2" id="text-org1822660">
+<div id="outline-container-org398bdb5" class="outline-2">
+<h2 id="org398bdb5">Bandit27 =&gt; Bandit28</h2>
+<div class="outline-text-2" id="text-org398bdb5">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit27</span>(view_output=<span style="color: #a9a1e1;">False</span>):
     <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit27"</span>)
@@ -1093,9 +1109,9 @@ After the bash shell has spawned, enter the command <code>./bandit27-do cat /etc
 </div>
 </div>
 
-<div id="outline-container-orgf82e0f9" class="outline-2">
-<h2 id="orgf82e0f9">Bandit28 =&gt; Bandit29</h2>
-<div class="outline-text-2" id="text-orgf82e0f9">
+<div id="outline-container-org484d7a9" class="outline-2">
+<h2 id="org484d7a9">Bandit28 =&gt; Bandit29</h2>
+<div class="outline-text-2" id="text-org484d7a9">
 <p>
 The password was originally kept in one of the files.
 If we look at the diffs between commits we are able to find the password.
@@ -1129,9 +1145,9 @@ From the command line:
 </div>
 </div>
 
-<div id="outline-container-orgfbae35e" class="outline-2">
-<h2 id="orgfbae35e">Bandit29 =&gt; Bandit30</h2>
-<div class="outline-text-2" id="text-orgfbae35e">
+<div id="outline-container-org09fa36a" class="outline-2">
+<h2 id="org09fa36a">Bandit29 =&gt; Bandit30</h2>
+<div class="outline-text-2" id="text-org09fa36a">
 <p>
 The password is found in the <code>dev</code> branch of the repository. You can find what branches are on the remote by running the command <code>git branch -r</code>.
 </p>
@@ -1156,9 +1172,9 @@ The password is found in the <code>dev</code> branch of the repository. You can 
 </div>
 </div>
 
-<div id="outline-container-org1907fae" class="outline-2">
-<h2 id="org1907fae">Bandit30 =&gt; Bandit31</h2>
-<div class="outline-text-2" id="text-org1907fae">
+<div id="outline-container-org9d2363b" class="outline-2">
+<h2 id="org9d2363b">Bandit30 =&gt; Bandit31</h2>
+<div class="outline-text-2" id="text-org9d2363b">
 <p>
 For this repository we have to read the <code>secret</code> tag. From the cli: <code>git show secret</code>.
 </p>
@@ -1172,8 +1188,40 @@ For this repository we have to read the <code>secret</code> tag. From the cli: <
     <span style="color: #dcaeea;">tag_name</span> = <span style="color: #98be65;">'secret'</span>
     <span style="color: #dcaeea;">obj</span> = repo.revparse_single(tag_name)
 
-    <span style="color: #dcaeea;">passwd</span> = obj.data.decode()
+    <span style="color: #dcaeea;">passwd</span> = obj.data.decode().strip()
     <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit31'</span>] = passwd
+    save()
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdbcaa6e" class="outline-2">
+<h2 id="orgdbcaa6e">Bandit31 =&gt; Bandit32</h2>
+<div class="outline-text-2" id="text-orgdbcaa6e">
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #51afef;">def</span> <span style="color: #c678dd;">bandit31</span>():
+    <span style="color: #51afef;">print</span>(<span style="color: #98be65;">"Pwning bandit31"</span>)
+    <span style="color: #dcaeea;">path</span> = clone_repo(<span style="color: #98be65;">'bandit31'</span>)
+    <span style="color: #dcaeea;">repo</span> = pygit2.Repository(path)
+
+    <span style="color: #51afef;">with</span> <span style="color: #c678dd;">open</span>(path + <span style="color: #98be65;">"/key.txt"</span>, <span style="color: #98be65;">'w'</span>) <span style="color: #51afef;">as</span> f:
+        f.write(<span style="color: #98be65;">"May I come in?"</span>)
+
+    <span style="color: #51afef;">try</span>:
+        os.unlink(path + <span style="color: #98be65;">"/.gitignore"</span>)
+    <span style="color: #51afef;">except</span>:
+        <span style="color: #51afef;">pass</span>
+
+    <span style="color: #dcaeea;">index</span> = repo.index
+    index.add(<span style="color: #98be65;">"key.txt"</span>)
+    index.write()
+
+    <span style="color: #dcaeea;">out</span> = os.popen(
+        F<span style="color: #98be65;">"cd {path} &amp;&amp; sshpass -p '{credentials['bandit31']}' git push origin master 2&gt;&amp;1"</span>).read()
+
+    <span style="color: #dcaeea;">passwd</span> = re.findall(r<span style="color: #98be65;">'password.*\nremote: (\w+)'</span>, out, re.MULTILINE)[<span style="color: #da8548; font-weight: bold;">0</span>]
+    <span style="color: #dcaeea;">credentials</span>[<span style="color: #98be65;">'bandit32'</span>] = passwd
     save()
 </pre>
 </div>
@@ -1182,7 +1230,7 @@ For this repository we have to read the <code>secret</code> tag. From the cli: <
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: CavemanJay</p>
-<p class="date">Created: 2021-05-03 Mon 17:14</p>
+<p class="date">Created: 2021-05-03 Mon 18:40</p>
 </div>
 </body>
 </html>
